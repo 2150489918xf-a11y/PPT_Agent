@@ -251,59 +251,275 @@
       border-color: var(--accent-primary); background: var(--accent-glow); color: var(--text-primary);
     }
 
-    /* Center: Canvas */
+    /* Center: Canvas Workspace */
     .main-panel {
       min-width: 0; min-height: 0; overflow: hidden;
       background: transparent;
-      display: grid; place-items: center; padding: 24px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
     }
-    .slide-canvas {
-      width: 100%; max-width: 860px; aspect-ratio: 16/9;
-      border-radius: 16px; overflow: hidden;
-      box-shadow: 0 24px 64px rgba(43, 58, 45, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.4);
+    .canvas-card {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.65);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .canvas-area {
+      flex: 1;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      min-height: 0;
       position: relative;
     }
+    .slide-canvas {
+      aspect-ratio: 16/9;
+      width: min(100%, calc((100vh - 230px) * 16 / 9));
+      max-height: calc(100% - 10px);
+      border-radius: 20px;
+      box-shadow: 0 24px 58px rgba(18, 38, 92, 0.16);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      transition: background 0.3s;
+    }
     .slide-canvas-inner {
-      width: 100%; height: 100%; padding: 48px 56px;
-      display: grid; align-content: center; gap: 16px;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
-    .slide-canvas-kicker {
-      font-size: 13px; font-weight: 800; text-transform: uppercase;
-      letter-spacing: 1px; color: var(--accent-primary);
+
+    /* Cover Slide Styling (牛顿第二定律专属封面) */
+    .cover-theme .slide-canvas-inner {
+      padding: 40px 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
-    .slide-canvas h2 {
-      font-size: clamp(24px, 3.2vw, 38px); font-weight: 800;
-      line-height: var(--leading-tight); color: var(--text-primary);
+    .deco-circle {
+      position: absolute;
+      width: 52px;
+      height: 52px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 15px;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.05);
     }
-    .slide-canvas p {
-      font-size: 15px; line-height: 1.7; color: var(--text-secondary);
-      max-width: 640px;
+    .circle-f { top: 40px; left: 40px; }
+    .circle-m { top: 40px; right: 40px; }
+    .circle-a { bottom: 40px; left: 40px; }
+    .deco-arrow {
+      position: absolute;
+      bottom: 44px;
+      right: 40px;
+      width: 32px;
+      height: 32px;
+      color: rgba(255, 255, 255, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .slide-canvas-bullets {
-      display: grid; gap: 10px; margin-top: 8px;
+    .deco-arrow svg {
+      width: 100%;
+      height: 100%;
+      stroke-width: 2.5;
     }
-    .slide-canvas-bullet {
-      display: grid; grid-template-columns: 8px 1fr; gap: 12px; align-items: start;
-      font-size: 14px; color: var(--text-secondary); line-height: 1.6;
+    .cover-content {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
     }
-    .slide-canvas-bullet i {
-      width: 8px; height: 8px; margin-top: 7px; border-radius: var(--radius-full);
-      background: var(--accent-primary);
+    .cover-content h2 {
+      font-size: 46px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      color: #fff !important;
+      margin: 0;
+      line-height: 1.15;
     }
-    .canvas-toolbar {
-      position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
-      display: flex; gap: 6px; padding: 6px; border-radius: var(--radius-full);
-      background: rgba(255, 255, 255, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+    .cover-content .subtitle {
+      font-size: 17px;
+      color: rgba(255, 255, 255, 0.7);
+      margin: 0 0 24px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
     }
-    .canvas-toolbar button {
-      width: 32px; height: 32px; border-radius: var(--radius-full);
-      display: grid; place-items: center;
+    .cover-meta {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 10px 24px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      font-size: 11px;
+    }
+    .meta-item span {
+      color: rgba(255, 255, 255, 0.5);
+      font-weight: 800;
+    }
+    .meta-item strong {
+      color: #fff;
+      font-size: 13px;
+      font-weight: 950;
+    }
+    .meta-divider {
+      width: 1px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    /* Content Slide Theme (普通页面排版) */
+    .content-theme .slide-canvas-inner {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      padding: 44px 52px;
+      text-align: left;
+    }
+    .content-theme .slide-canvas-kicker {
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--lime);
+      margin-bottom: 8px;
+    }
+    .content-theme h2 {
+      font-size: 30px;
+      font-weight: 900;
+      color: #fff !important;
+      margin: 0 0 10px;
+      line-height: 1.25;
+    }
+    .content-theme .slide-desc {
+      font-size: 14.5px;
+      color: rgba(255, 255, 255, 0.8);
+      margin: 0 0 20px;
+      line-height: 1.6;
+    }
+    .content-theme .slide-canvas-bullets {
+      display: grid;
+      gap: 10px;
+      width: 100%;
+      margin-top: 4px;
+    }
+    .content-theme .slide-canvas-bullet {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13.5px;
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.5;
+    }
+    .content-theme .slide-canvas-bullet i {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--lime);
+      flex-shrink: 0;
+    }
+
+    /* Canvas Controls (底部横向操作条) */
+    .canvas-controls {
+      height: 72px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.8);
+      border-top: 1px solid rgba(18, 22, 21, 0.05);
+    }
+    .page-nav {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(18, 22, 21, 0.08);
+      padding: 4px 10px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+    }
+    .nav-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
       color: #475569;
-      font-size: 14px; transition: all var(--duration-fast) var(--ease-default);
+      transition: all 0.2s;
     }
+    .nav-btn:hover {
+      background: rgba(18, 22, 21, 0.06);
+      color: #121615;
+    }
+    .nav-btn svg {
+      width: 14px;
+      height: 14px;
+      stroke-width: 2.7;
+    }
+    .page-indicator {
+      font-size: 13.5px;
+      font-weight: 850;
+      color: #121615;
+      min-width: 54px;
+      text-align: center;
+    }
+    .export-ppt-btn {
+      height: 42px;
+      padding: 0 18px;
+      border-radius: 12px;
+      background: var(--lime);
+      color: #0d120e;
+      font-weight: 950;
+      font-size: 12.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: none;
+      box-shadow: 0 10px 22px rgba(188, 255, 52, 0.22);
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .export-ppt-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(188, 255, 52, 0.32);
+    }
+    .export-ppt-btn svg {
+      width: 15px;
+      height: 15px;
+      stroke-width: 3;
+      color: #0d120e;
+    }
+
     .canvas-toolbar button:hover { background: rgba(255, 255, 255, 0.85); color: #121615; }
 
     /* Right: AI Panel */
@@ -433,13 +649,13 @@
   <div class="app">
     <header class="topbar">
       <div class="topbar-left">
-        <button class="topbar-back" onclick="alert('返回课程工作台')">
+        <button class="topbar-back" onclick="location.href='workspace.html'">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
           返回
         </button>
         <div class="topbar-title">
-          <h1 id="topbar-subject">牛顿第一定律</h1>
-          <span id="topbar-meta">PPT 课件 · 6 页</span>
+          <h1 id="topbar-subject">牛顿第二定律</h1>
+          <span id="topbar-meta">PPT 课件 · 14 页</span>
         </div>
       </div>
       <div class="topbar-right">
@@ -454,7 +670,7 @@
       <aside class="left-panel">
         <header class="slides-head">
           <strong>幻灯片</strong>
-          <span id="slide-count">6 页</span>
+          <span id="slide-count">14 页</span>
         </header>
         <section class="slide-list" id="slide-list"></section>
         <footer class="slides-footer">
@@ -465,24 +681,29 @@
         </footer>
       </aside>
 
-      <!-- Center: Canvas -->
+      <!-- Center: Canvas Workspace -->
       <main class="main-panel">
-        <div class="slide-canvas" id="slide-canvas">
-          <div class="slide-canvas-inner" id="canvas-inner"></div>
-          <div class="canvas-toolbar">
-            <button title="上一页" onclick="prevSlide()">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-            </button>
-            <button title="下一页" onclick="nextSlide()">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-            </button>
-            <button title="删除" onclick="deleteSlide()">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
-            </button>
-            <button title="复制" onclick="duplicateSlide()">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-            </button>
+        <div class="canvas-card">
+          <div class="canvas-area">
+            <div class="slide-canvas" id="slide-canvas">
+              <div class="slide-canvas-inner" id="canvas-inner"></div>
+            </div>
           </div>
+          <footer class="canvas-controls">
+            <div class="page-nav">
+              <button class="nav-btn" onclick="prevSlide()" title="上一页">
+                <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+              <span class="page-indicator"><span id="current-page-num">1</span> / <span id="total-page-num">14</span></span>
+              <button class="nav-btn" onclick="nextSlide()" title="下一页">
+                <svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+              </button>
+            </div>
+            <button class="export-ppt-btn" onclick="alert('导出 PPT')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+              导出 PPT
+            </button>
+          </footer>
         </div>
       </main>
 
@@ -522,40 +743,88 @@
   <script>
     const slides = [
       {
-        id: 'cover', type: '封面', title: '牛顿第一定律',
-        content: '八年级物理 · 惯性与力的关系',
-        bg: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+        id: 'cover', type: '封面', title: '牛顿第二定律',
+        subtitle: "Newton's Second Law", grade: '初二物理', duration: '45分钟',
+        bg: 'linear-gradient(135deg, #1e52d6 0%, #153fa8 100%)',
         bullets: []
       },
       {
-        id: 'toc', type: '目录', title: '课堂流程',
-        content: '本节课分为五个环节',
-        bg: 'linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%)',
-        bullets: ['导入：公交急刹案例', '建构：惯性概念讲解', '探究：生活中的反直觉案例', '应用：课堂互动练习', '总结：归纳力与运动关系']
+        id: 'toc', type: '目录', title: '课堂流程设计',
+        content: '本节课将围绕以下四个核心步骤展开定量探究。',
+        bg: 'linear-gradient(135deg, #1e52d6 0%, #153fa8 100%)',
+        bullets: ['课前导入：物体的加速度与哪些因素有关？', '科学探究：探究加速度与力、质量的关系（控制变量法）', '定律得出：牛顿第二定律公式 F=ma 及力的单位定义', '知识巩固：三大物理特性解析与随堂速测']
       },
       {
-        id: 'intro', type: '导入', title: '你坐公交急刹时身体为什么会前倾？',
-        content: '从生活经验出发，引发学生思考惯性的本质。',
-        bg: 'linear-gradient(135deg, #1a2332 0%, #1e3a5f 100%)',
-        bullets: ['公交车突然刹车，乘客身体前倾', '这不是因为"力推了你"，而是因为你的身体想保持原来的运动状态', '这就是惯性——物体保持运动状态的性质']
+        id: 'intro', type: '导入', title: '生活启发：小车受力与运动状态',
+        content: '思考：要让静止的小车跑得更快，我们需要怎么做？',
+        bg: 'linear-gradient(135deg, #1e52d6 0%, #153fa8 100%)',
+        bullets: ['用力推小车，推力越大，小车速度改变得越快', '同样的推力，推空车和推满载的车，哪个更容易起步？', '日常结论：加速度的大小可能与“力”和“质量”都有关']
       },
       {
-        id: 'concept', type: '内容', title: '什么是惯性？',
-        content: '惯性是物体保持原来运动状态不变的性质。',
-        bg: 'linear-gradient(135deg, #1e1e28 0%, #2a2a3d 100%)',
-        bullets: ['一切物体都有惯性', '惯性是物体的固有属性', '质量越大，惯性越大', '惯性不是力，不能说"受到惯性"']
+        id: 'method', type: '探究', title: '科学方法：控制变量法',
+        content: '由于加速度同时受力与质量两个物理量的影响，必须使用控制变量法。',
+        bg: 'linear-gradient(135deg, #1e52d6 0%, #153fa8 100%)',
+        bullets: ['步骤 1：保持小车质量 m 不变，探究加速度 a 与拉力 F 的关系', '步骤 2：保持拉力 F 不变，探究加速度 a 与质量 m 的关系', '总结数据，得出三者之间的数学函数模型']
       },
       {
-        id: 'experiment', type: '探究', title: '生活中的惯性实验',
-        content: '通过简单实验加深对惯性的理解。',
-        bg: 'linear-gradient(135deg, #1a2a1a 0%, #2d4a2d 100%)',
-        bullets: ['实验1：快速抽出纸片，硬币落入杯中', '实验2：叠棋子，击打最下面一颗', '思考：为什么击打时上面的棋子不动？']
+        id: 'exp1', type: '实验', title: '实验探究一：a 与 F 的关系',
+        content: '固定小车质量 m，改变吊盘中砝码的质量（即改变小车受到的拉力 F）进行实验。',
+        bg: 'linear-gradient(135deg, #1e52d6 0%, #153fa8 100%)',
+        bullets: ['记录多组拉力 F 与对应的加速度 a 的数值', '在坐标系中绘制 a-F 图像，图像特征为一条过原点的倾斜直线', '实验结论：在物体质量一定时，加速度与受到的合外力成正比']
+      },
+      {
+        id: 'exp2', type: '实验', title: '实验探究二：a 与 m 的关系',
+        content: '固定拉力 F，通过在小车上增加砝码来改变小车的总质量 m 再次进行实验。',
+        bg: 'linear-gradient(135deg, #1e52d6 0%, #153fa8 100%)',
+        bullets: ['记录多组质量 m 与对应的加速度 a 的数值', '绘制 a-m 图像（双曲线）和 a-(1/m) 图像（直线）', '实验结论：在拉力一定时，物体的加速度与它的质量成反比']
+      },
+      {
+        id: 'law', type: '定理', title: '牛顿第二定律得出',
+        content: '结合两次实验结论，我们可以得出加速度、力、质量三者的定量关系。',
+        bg: 'linear-gradient(135deg, #1e52d6 0%, #153fa8 100%)',
+        bullets: ['加速度 a 与作用力 F 成正比，与质量 m 成反比', '数学表达式：a ∝ F / m，即 F ∝ ma', '公式表示：F = k·ma（在国际单位制中比例系数 k = 1）']
+      },
+      {
+        id: 'formula', type: '公式', title: '核心公式：F = ma',
+        content: '这是经典力学中最核心的方程之一，建立了力与运动的直接桥梁。',
+        bg: 'linear-gradient(135deg, #1e52d6 0%, #153fa8 100%)',
+        bullets: ['F 代表物体所受的合外力（单位：牛顿 N）', 'm 代表物体的质量（单位：千克 kg）', 'a 代表物体的加速度（单位：米每二次方秒 m/s²）']
+      },
+      {
+        id: 'unit', type: '解析', title: '力的单位“牛顿”的定义',
+        content: '为什么公式中比例系数 k 可以等于 1？这源于对力的单位的科学定义。',
+        bg: 'linear-gradient(135deg, #1e52d6 0%, #153fa8 100%)',
+        bullets: ['定义：使质量为 1 kg 的物体产生 1 m/s² 加速度的力，定义为 1 N', '即：1 N = 1 kg·m/s²', '因为单位制的合理统一，使得核心公式可以最简化地写成 F = ma']
+      },
+      {
+        id: 'feature', type: '特性', title: '牛顿第二定律的三大特性',
+        content: '深入理解公式时需要注意的物理学内涵。',
+        bg: 'linear-gradient(135deg, #1e52d6 0%, #153fa8 100%)',
+        bullets: ['瞬时性：加速度 a 与合外力 F 瞬时对应，力变加速度立即变', '矢量性：加速度 a 的方向始终与合外力 F 的方向相同', '同一性：a、F、m 必须对应同一个研究对象']
+      },
+      {
+        id: 'example1', type: '例题', title: '基础计算例题精讲',
+        content: '例题：一个质量为 2 kg 的物体，受到 6 N 的水平拉力，求物体的加速度。',
+        bg: 'linear-gradient(135deg, #1e52d6 0%, #153fa8 100%)',
+        bullets: ['已知条件：m = 2 kg, F = 6 N', '根据公式：a = F / m', '代入计算：a = 6 N / 2 kg = 3 m/s²', '答：物体的加速度为 3 m/s²']
+      },
+      {
+        id: 'example2', type: '应用', title: '综合应用：运动与力的综合',
+        content: '例题：静止在水平面上的滑块，受 10N 水平拉力开始运动，摩擦力为 2N，求其运动状态。',
+        bg: 'linear-gradient(135deg, #1e52d6 0%, #153fa8 100%)',
+        bullets: ['第一步：求合外力 F_合 = F_拉 - f = 10N - 2N = 8N', '第二步：根据 m 求加速度 a = F_合 / m', '第三步：结合运动学公式，求任意时刻的速度和位移']
+      },
+      {
+        id: 'quiz', type: '练习', title: '随堂速测：概念理解',
+        content: '请快速判断以下物理学说法的对错。',
+        bg: 'linear-gradient(135deg, #1e52d6 0%, #153fa8 100%)',
+        bullets: ['1. 物体只有在受力时才会有加速度（对）', '2. 物体速度越大，所受到的力就越大（错，力改变速度而非维持速度）', '3. 惯性越大的物体，其加速度一定越小（错，还要看合外力大小）']
       },
       {
         id: 'summary', type: '总结', title: '本节课要点回顾',
-        content: '掌握惯性概念，理解力与运动的关系。',
-        bg: 'linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%)',
-        bullets: ['惯性是物体的固有属性', '力是改变物体运动状态的原因', '质量是惯性大小的唯一量度', '生活中的惯性现象无处不在']
+        content: '今天我们共同探究并得出了物理学中极其重要的牛顿第二定律。',
+        bg: 'linear-gradient(135deg, #1e52d6 0%, #153fa8 100%)',
+        bullets: ['核心公式：F = ma，深刻反映了力是产生加速度的唯一根源', '物理学研究方法：控制变量法与图像分析法', '应用意义：利用已知受力求运动，或利用已知运动求受力']
       }
     ];
 
@@ -579,6 +848,12 @@
       `).join('');
       document.getElementById('slide-count').textContent = `${slides.length} 页`;
       document.getElementById('topbar-meta').textContent = `PPT 课件 · ${slides.length} 页`;
+      
+      // 更新控制条中的页码
+      const currentEl = document.getElementById('current-page-num');
+      const totalEl = document.getElementById('total-page-num');
+      if (currentEl) currentEl.textContent = selectedIndex + 1;
+      if (totalEl) totalEl.textContent = slides.length;
     }
 
     function renderCanvas() {
@@ -587,16 +862,41 @@
       const canvas = document.getElementById('slide-canvas');
       const inner = document.getElementById('canvas-inner');
       canvas.style.background = s.bg;
-      let html = `<span class="slide-canvas-kicker">${s.type}</span><h2>${s.title}</h2>`;
-      if (s.content) html += `<p>${s.content}</p>`;
-      if (s.bullets.length) {
-        html += '<div class="slide-canvas-bullets">';
-        s.bullets.forEach(b => {
-          html += `<div class="slide-canvas-bullet"><i></i><span>${b}</span></div>`;
-        });
-        html += '</div>';
+      
+      if (s.type === '封面') {
+        canvas.className = "slide-canvas cover-theme";
+        inner.innerHTML = `
+          <div class="deco-circle circle-f">F</div>
+          <div class="deco-circle circle-m">m</div>
+          <div class="deco-circle circle-a">a</div>
+          <div class="deco-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </div>
+          <div class="cover-content">
+            <h2>${s.title}</h2>
+            <p class="subtitle">${s.subtitle || "Newton's Second Law"}</p>
+            <div class="cover-meta">
+              <div class="meta-item"><span>年级</span><strong>${s.grade || "初二物理"}</strong></div>
+              <div class="meta-divider"></div>
+              <div class="meta-item"><span>课时</span><strong>${s.duration || "45分钟"}</strong></div>
+            </div>
+          </div>
+        `;
+      } else {
+        canvas.className = "slide-canvas content-theme";
+        let bulletsHtml = '';
+        if (s.bullets && s.bullets.length) {
+          bulletsHtml = `<div class="slide-canvas-bullets">` + 
+            s.bullets.map(b => `<div class="slide-canvas-bullet"><i></i><span>${b}</span></div>`).join('') + 
+            `</div>`;
+        }
+        inner.innerHTML = `
+          <span class="slide-canvas-kicker">${s.type}</span>
+          <h2>${s.title}</h2>
+          ${s.content ? `<p class="slide-desc">${s.content}</p>` : ''}
+          ${bulletsHtml}
+        `;
       }
-      inner.innerHTML = html;
     }
 
     function renderContext() {

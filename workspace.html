@@ -576,7 +576,7 @@
     function getModuleActions() {
       switch (currentModule) {
         case 'ppt': return [
-          { icon: '📊', label: '查看 PPT', description: '打开已生成的课件继续编辑。', onclick: "alert('打开 PPT 页')", disabled: false },
+          { icon: '📊', label: '查看 PPT', description: '打开已生成的课件继续编辑。', onclick: "location.href='ppt-preview.html'", disabled: false },
           { icon: '🔄', label: '重新生成', description: '基于课程大纲重新生成课件。', onclick: "alert('重新生成')", disabled: false }
         ];
         case 'lesson-plan': return [
