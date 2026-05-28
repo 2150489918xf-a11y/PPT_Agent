@@ -6,24 +6,21 @@
   <title>EduAI Workbench</title>
   <style>
     :root {
-      --ink: #121615;
-      --muted: #7b847d;
-      --line: rgba(255, 255, 255, 0.74);
-      --tile: rgba(253, 255, 251, 0.56);
-      --panel: rgba(249, 252, 245, 0.58);
-      --lime: #c4ff38;
-      --green: #17663a;
-      --dark: #252928;
-      --shadow: 0 22px 52px rgba(43, 58, 45, 0.13);
-      --soft-shadow: 0 16px 34px rgba(43, 58, 45, 0.08);
-      --radius-xl: 28px;
-      --radius-lg: 22px;
-      --radius-md: 16px;
-      --page-max: 1520px;
-      --sidebar-left: 22px;
-      --sidebar-width: 82px;
-      --sidebar-top: 292px;
-      --sidebar-height: 392px;
+      --ink: #111514;
+      --muted: #7a827b;
+      --soft: rgba(251, 254, 247, 0.62);
+      --soft-strong: rgba(255, 255, 255, 0.72);
+      --line: rgba(255, 255, 255, 0.76);
+      --lime: #b9ff24;
+      --lime-soft: #e9ffc6;
+      --green: #176843;
+      --deep: #141b17;
+      --deep-2: #263624;
+      --shadow: 0 28px 64px rgba(42, 57, 42, 0.14);
+      --shadow-soft: 0 18px 40px rgba(42, 57, 42, 0.1);
+      --radius-xl: 32px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
     }
 
     * {
@@ -32,20 +29,19 @@
 
     html,
     body {
-      width: 100%;
-      height: 100%;
+      min-height: 100%;
     }
 
     body {
       margin: 0;
-      overflow: hidden;
       color: var(--ink);
       font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif;
       background:
-        radial-gradient(circle at 8% 50%, rgba(205, 255, 72, 0.26), transparent 20%),
-        radial-gradient(circle at 66% 14%, rgba(177, 196, 176, 0.28), transparent 30%),
-        radial-gradient(circle at 86% 92%, rgba(167, 188, 167, 0.22), transparent 24%),
-        linear-gradient(108deg, #f7f9ef 0%, #edf4e7 44%, #e1eadc 100%);
+        radial-gradient(circle at 12% 48%, rgba(198, 255, 54, 0.35), transparent 18rem),
+        radial-gradient(circle at 72% 13%, rgba(143, 166, 142, 0.26), transparent 24rem),
+        radial-gradient(circle at 92% 86%, rgba(159, 178, 155, 0.28), transparent 22rem),
+        linear-gradient(115deg, #fbfcf4 0%, #eef6e7 46%, #e0eadb 100%);
+      overflow-x: hidden;
     }
 
     body::before {
@@ -54,471 +50,26 @@
       inset: 0;
       pointer-events: none;
       background-image:
-        linear-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.15) 1px, transparent 1px);
-      background-size: 38px 38px;
-      mask-image: radial-gradient(circle at 50% 50%, black, transparent 80%);
-      opacity: 0.35;
+        linear-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.14) 1px, transparent 1px);
+      background-size: 2.4rem 2.4rem;
+      mask-image: radial-gradient(circle at 48% 46%, black, transparent 78%);
+      opacity: 0.4;
     }
 
-    .shell {
-      margin: 20px 40px 20px 260px;
-      width: auto;
-      height: min(960px, calc(100vh - 40px));
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
+    button {
+      font: inherit;
+      cursor: pointer;
     }
 
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 56px;
-      flex: 0 0 auto;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      font-size: 24px;
-      font-weight: 900;
-      letter-spacing: -0.4px;
-    }
-
-    .brand span {
-      padding-left: 18px;
-      border-left: 1px solid rgba(18, 22, 21, 0.12);
-      color: #707872;
-      font-size: 14px;
-      font-weight: 800;
-    }
-
-    .top-actions {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .search {
-      width: 292px;
-      height: 54px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 0 18px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.48);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
-      color: #99a099;
-      font-size: 14px;
-    }
-
-    .round-btn {
-      width: 54px;
-      height: 54px;
-      display: grid;
-      place-items: center;
-      border-radius: 50%;
-      border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.5);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
-    }
-
-    .headline-row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: end;
-      gap: 24px;
-      flex: 0 0 auto;
-    }
-
-    h1 {
-      margin: 0 0 6px;
-      font-size: 32px;
-      line-height: 1.08;
-      letter-spacing: -0.7px;
-      font-weight: 950;
-    }
-
-    .hello {
-      color: var(--muted);
-      font-size: 15px;
-      font-weight: 600;
-    }
-
-    .filters {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .pill {
-      height: 54px;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 0 20px;
-      border-radius: 18px;
-      border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.5);
-      box-shadow: var(--soft-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.82);
-      font-size: 14px;
-      font-weight: 900;
-      transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
-    }
-
-    .pill.lime {
-      background: var(--lime);
-      border-color: transparent;
-      box-shadow: 0 18px 36px rgba(188, 255, 52, 0.28);
-    }
-
-    .content {
-      display: grid;
-      grid-template-columns: minmax(0, 1.45fr) minmax(360px, 0.7fr);
-      gap: 28px;
-      min-height: 0;
-      flex: 1 1 auto;
-    }
-
-    .left-col,
-    .right-col {
-      min-height: 0;
-    }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 18px;
-      margin-bottom: 22px;
-    }
-
-    .stat-card {
-      height: 128px;
-      position: relative;
-      padding: 22px 24px;
-      border-radius: var(--radius-xl);
-      border: 1px solid var(--line);
-      background: var(--tile);
-      box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.8);
-      transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
-    }
-
-    .stat-card.dark {
-      background: #2a2d2c;
-      color: #fff;
-      box-shadow: 0 20px 42px rgba(18, 22, 19, 0.18);
-    }
-
-    .stat-card h3 {
-      margin: 0 0 20px;
-      color: #68716a;
-      font-size: 13px;
-      font-weight: 850;
-    }
-
-    .stat-card.dark h3 {
-      color: rgba(255, 255, 255, 0.7);
-    }
-
-    .stat-card strong {
-      font-size: 30px;
-      line-height: 1;
-      font-weight: 950;
-      letter-spacing: -0.5px;
-    }
-
-    .stat-icon {
-      position: absolute;
-      right: 22px;
-      bottom: 22px;
-      color: var(--green);
-    }
-
-    .stat-card.dark .stat-icon {
-      color: rgba(255, 255, 255, 0.72);
-    }
-
-    .calendar {
-      height: calc(100% - 150px);
-      min-height: 520px;
-      padding: 28px 30px 26px;
-      border-radius: var(--radius-xl);
-      border: 1px solid var(--line);
-      background: var(--panel);
-      box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.8);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .section-title {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 28px;
-      font-size: 21px;
-      font-weight: 950;
-      letter-spacing: -0.3px;
-      flex: 0 0 auto;
-    }
-
-    .camera {
-      height: 42px;
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      padding: 0 15px;
-      border-radius: 21px;
-      background: var(--lime);
-      font-size: 13px;
-      font-weight: 900;
-      box-shadow: 0 14px 30px rgba(188, 255, 44, 0.28);
-      transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
-    }
-
-    .schedule {
-      flex: 1 1 auto;
-      display: grid;
-      grid-template-columns: 56px repeat(5, minmax(0, 1fr));
-      grid-template-rows: 42px repeat(4, 76px);
-      gap: 10px;
-      min-height: 0;
-    }
-
-    .day {
-      padding: 6px 10px;
-      border-radius: 14px;
-      background: rgba(255, 255, 255, 0.34);
-      font-size: 13px;
-      font-weight: 950;
-      line-height: 1.22;
-    }
-
-    .day span {
-      display: block;
-      color: #89908b;
-      font-size: 12px;
-      font-weight: 800;
-    }
-
-    .time {
-      display: flex;
-      align-items: center;
-      color: #889089;
-      font-size: 13px;
-      font-weight: 900;
-    }
-
-    .lesson {
-      padding: 10px 12px;
-      border-radius: 14px;
-      background: rgba(255, 255, 255, 0.62);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
-      font-size: 13px;
-      font-weight: 950;
-      line-height: 1.26;
-      transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease, border-color 180ms ease;
-    }
-
-    .lesson.empty {
-      background: rgba(255, 255, 255, 0.32);
-    }
-
-    .lesson.hot {
-      background: rgba(236, 255, 196, 0.88);
-      border: 1px solid rgba(193, 238, 86, 0.74);
-    }
-
-    .lesson small {
-      display: block;
-      margin-bottom: 5px;
-      color: var(--green);
-      font-size: 12px;
-      font-weight: 950;
-    }
-
-    .lesson span {
-      display: block;
-      margin-top: 2px;
-      color: #616963;
-      font-size: 12px;
-      font-weight: 850;
-    }
-
-    .right-col {
-      display: grid;
-      grid-template-rows: 342px minmax(0, 1fr);
-      gap: 22px;
-    }
-
-    .ai-card,
-    .plan-card {
-      border-radius: var(--radius-xl);
-      transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
-    }
-
-    .ai-card {
-      padding: 30px 30px 26px;
-      color: #fff;
-      background:
-        radial-gradient(circle at 60% 100%, rgba(196, 255, 54, 0.2), transparent 36%),
-        linear-gradient(135deg, #3a472f 0%, #18201d 58%, #212522 100%);
-      box-shadow: 0 26px 58px rgba(26, 35, 27, 0.28);
-    }
-
-    .ai-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 24px;
-    }
-
-    .tag {
-      height: 36px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 0 14px;
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.12);
-      color: var(--lime);
-      font-size: 12px;
-      font-weight: 950;
-    }
-
-    .ai-card h2 {
-      margin: 0 0 22px;
-      font-size: 22px;
-      line-height: 1.18;
-      font-weight: 950;
-    }
-
-    .ai-card p {
-      margin: 0 0 24px;
-      color: rgba(255, 255, 255, 0.74);
-      font-size: 14px;
-      line-height: 1.65;
-      font-weight: 650;
-    }
-
-    .primary {
-      width: 100%;
-      height: 54px;
-      border: none;
-      border-radius: 16px;
-      background: var(--lime);
-      color: #0d120e;
-      font-size: 16px;
-      font-weight: 950;
-      box-shadow: 0 16px 32px rgba(167, 255, 32, 0.24);
-      transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
-    }
-
-    .plan-card {
-      padding: 32px 30px 24px;
-      border: 1px solid var(--line);
-      background: var(--panel);
-      box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.8);
-      display: flex;
-      flex-direction: column;
-      min-height: 0;
-      overflow: hidden;
-    }
-
-    .plan-card .section-title {
-      margin-bottom: 34px;
-    }
-
-    .progress-row {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      margin-bottom: 18px;
-      color: #7f8881;
-      font-size: 14px;
-      font-weight: 800;
-    }
-
-    .percent {
-      color: #121513;
-      font-size: 22px;
-      font-weight: 950;
-    }
-
-    .bar {
-      height: 12px;
-      padding: 3px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.64);
-      margin-bottom: 14px;
-    }
-
-    .fill {
-      width: 34%;
-      height: 100%;
-      border-radius: inherit;
-      background: var(--lime);
-    }
-
-    .meta {
-      display: flex;
-      justify-content: space-between;
-      color: #828a84;
-      font-size: 12px;
-      font-weight: 900;
-      margin-bottom: 26px;
-    }
-
-    .today {
-      color: #8c948d;
-      font-size: 13px;
-      font-weight: 900;
-      margin-bottom: 18px;
-    }
-
-    .task-list {
-      display: grid;
-      gap: 14px;
-      min-height: 0;
-    }
-
-    .task {
-      height: 56px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 18px 0 20px;
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.5);
-      font-size: 14px;
-      font-weight: 950;
-      transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
-    }
-
-    .task-left {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      min-width: 0;
-    }
-
-    .task-badge {
-      width: 30px;
-      height: 30px;
-      display: grid;
-      place-items: center;
-      border-radius: 50%;
-      background: #eafecf;
-      color: #1a1f1c;
-      flex: 0 0 auto;
-    }
-
-    .state {
-      color: #787f78;
+    svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      stroke: currentColor;
+      stroke-width: 2.5;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
       flex: 0 0 auto;
     }
 
@@ -735,17 +286,6 @@
       color: #68716a;
     }
 
-    svg {
-      width: 20px;
-      height: 20px;
-      stroke: currentColor;
-      stroke-width: 2.7;
-      fill: none;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      flex: 0 0 auto;
-    }
-
     .side-main .grid-icon {
       width: 22px;
       height: 22px;
@@ -759,87 +299,593 @@
       border-radius: 2px;
     }
 
-    .pill:hover,
-    .camera:hover,
-    .primary:hover {
+    .shell {
+      position: relative;
+      z-index: 1;
+      width: calc(100% - 288px);
+      min-height: 100vh;
+      margin-left: 260px;
+      padding: 1.55rem 1.75rem 2rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .topbar {
+      min-height: 3.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      min-width: 0;
+      font-size: 1.55rem;
+      font-weight: 950;
+      letter-spacing: 0;
+    }
+
+    .brand span {
+      padding-left: 1rem;
+      border-left: 1px solid rgba(17, 21, 20, 0.12);
+      color: #6f7972;
+      font-size: 0.92rem;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .search {
+      width: min(20rem, 34vw);
+      min-height: 3.35rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0 1.1rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.5);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
+      color: #939b96;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: text;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, border-color 180ms ease, color 180ms ease;
+    }
+
+    .round-btn {
+      width: 3.35rem;
+      height: 3.35rem;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.55);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
+      color: #101514;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, border-color 180ms ease, color 180ms ease;
+    }
+
+    .hero-row {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .eyebrow {
+      margin: 0 0 0.25rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+      font-weight: 850;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.05rem, 3vw, 3.25rem);
+      line-height: 1.02;
+      letter-spacing: 0;
+      font-weight: 950;
+    }
+
+    .filters {
+      display: flex;
+      gap: 0.9rem;
+      align-items: center;
+    }
+
+    .pill {
+      min-height: 3.25rem;
+      padding: 0 1.1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      border: 1px solid var(--line);
+      border-radius: 1.05rem;
+      background: rgba(255, 255, 255, 0.52);
+      box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(255, 255, 255, 0.82);
+      color: #111514;
+      font-size: 0.9rem;
+      font-weight: 950;
+      white-space: nowrap;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, border-color 180ms ease, filter 180ms ease;
+    }
+
+    .pill.lime {
+      border-color: transparent;
+      background: var(--lime);
+      box-shadow: 0 18px 38px rgba(185, 255, 36, 0.3);
+    }
+
+    .search:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.96);
+      background: rgba(255, 255, 255, 0.68);
+      color: #6f7972;
+      box-shadow: 0 18px 34px rgba(42, 57, 42, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    }
+
+    .search:focus-within,
+    .search:focus-visible,
+    .round-btn:focus-visible,
+    .pill:focus-visible {
+      outline: 3px solid rgba(185, 255, 36, 0.78);
+      outline-offset: 3px;
+    }
+
+    .round-btn:hover,
+    .pill:hover {
       transform: translateY(-3px);
+      border-color: rgba(255, 255, 255, 0.96);
+      background: rgba(255, 255, 255, 0.72);
+      box-shadow: 0 20px 38px rgba(42, 57, 42, 0.13), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    }
+
+    .pill.lime:hover {
+      background: #c4ff32;
+      box-shadow: 0 22px 42px rgba(185, 255, 36, 0.36);
       filter: brightness(1.02);
     }
 
-    .pill:hover {
-      box-shadow: 0 22px 42px rgba(45, 59, 46, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+    .round-btn:active,
+    .pill:active {
+      transform: translateY(-1px) scale(0.98);
+      box-shadow: 0 12px 24px rgba(42, 57, 42, 0.11), inset 0 1px 0 rgba(255, 255, 255, 0.86);
     }
 
-    .stat-card:hover,
-    .ai-card:hover,
-    .plan-card:hover {
-      transform: translateY(-6px);
-      filter: brightness(1.01);
+    .entry-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1rem;
+      padding: 1.15rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: rgba(253, 255, 250, 0.42);
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
     }
 
-    .stat-card:hover {
-      box-shadow: 0 34px 74px rgba(41, 57, 43, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.82);
+    .entry-card {
+      min-height: 8.2rem;
+      position: relative;
+      padding: 1.35rem 4rem 1.35rem 1.35rem;
+      border: 1px solid rgba(255, 255, 255, 0.76);
+      border-radius: 1.35rem;
+      background: rgba(255, 255, 255, 0.58);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.86);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
     }
 
-    .ai-card:hover {
-      box-shadow: 0 36px 70px rgba(26, 35, 27, 0.34);
+    .entry-card h2 {
+      margin: 0;
+      font-size: clamp(1.45rem, 1.7vw, 2rem);
+      line-height: 1.12;
+      letter-spacing: 0;
+      font-weight: 950;
+      white-space: nowrap;
     }
 
-    .plan-card:hover {
-      box-shadow: 0 34px 74px rgba(41, 57, 43, 0.17), inset 0 1px 0 rgba(255, 255, 255, 0.82);
+    .entry-card small {
+      display: block;
+      margin-top: 0.45rem;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 850;
     }
 
-    .lesson:hover,
-    .task:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 34px rgba(59, 74, 56, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    .entry-arrow {
+      position: absolute;
+      right: 1.25rem;
+      top: 1.25rem;
+      width: 2.6rem;
+      height: 2.6rem;
+      border: 1px solid rgba(17, 21, 20, 0.1);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.7);
+      color: #101514;
+      box-shadow: 0 12px 22px rgba(45, 58, 42, 0.08);
+      transition: transform 180ms ease, background 180ms ease;
     }
 
-    .lesson.hot:hover {
-      background: rgba(240, 255, 204, 0.96);
-      border-color: rgba(193, 238, 86, 0.95);
+    .entry-card.featured {
+      background:
+        radial-gradient(circle at 82% 8%, rgba(185, 255, 36, 0.25), transparent 6rem),
+        #262b29;
+      color: #fff;
     }
 
-    .camera:hover,
-    .primary:hover {
-      box-shadow: 0 22px 40px rgba(175, 255, 36, 0.34);
+    .entry-card.featured small {
+      color: rgba(255, 255, 255, 0.68);
+    }
+
+    .entry-card.featured .entry-arrow {
+      border: 0;
+      background: var(--lime);
+    }
+
+    .entry-card:hover,
+    .work-panel:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 36px 76px rgba(42, 57, 42, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.84);
+    }
+
+    .entry-card:hover .entry-arrow {
+      transform: translateX(0.25rem);
+      background: var(--lime);
+    }
+
+    .entry-card:focus-visible {
+      outline: 3px solid rgba(185, 255, 36, 0.85);
+      outline-offset: 3px;
+    }
+
+    .work-grid {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1.12fr) minmax(25rem, 0.88fr);
+      gap: 1.55rem;
+    }
+
+    .work-panel {
+      min-height: 27rem;
+      padding: clamp(1.4rem, 2vw, 2rem);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: var(--soft);
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      transition: transform 180ms ease, box-shadow 180ms ease;
+      overflow: hidden;
+    }
+
+    .analysis-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 1.45rem;
+    }
+
+    .analysis-content {
+      display: grid;
+      grid-template-columns: minmax(18rem, 0.82fr) minmax(18rem, 1fr);
+      gap: 1.35rem;
+      align-items: start;
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+
+    .panel-kicker {
+      margin: 0 0 0.8rem;
+      color: var(--green);
+      font-size: 0.9rem;
+      font-weight: 950;
+    }
+
+    .panel-title {
+      margin: 0;
+      font-size: clamp(2.2rem, 3vw, 3.75rem);
+      line-height: 1.06;
+      letter-spacing: 0;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
+    .panel-copy {
+      max-width: 52rem;
+      margin: 1rem 0 0;
+      color: #667069;
+      font-size: 0.98rem;
+      line-height: 1.75;
+      font-weight: 720;
+    }
+
+    .ai-card {
+      align-self: start;
+      min-height: 19rem;
+      padding: 1.5rem;
+      border-radius: 1.55rem;
+      color: #fff;
+      background:
+        radial-gradient(circle at 68% 100%, rgba(185, 255, 36, 0.18), transparent 38%),
+        linear-gradient(135deg, var(--deep-2), var(--deep) 58%, #101413);
+      box-shadow: 0 26px 56px rgba(22, 31, 23, 0.34);
+    }
+
+    .ai-head,
+    .plan-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .tag {
+      min-height: 2.15rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0 0.8rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--lime);
+      font-size: 0.78rem;
+      font-weight: 950;
+    }
+
+    .ai-card h3 {
+      margin: 2.2rem 0 1rem;
+      font-size: 1.45rem;
+      line-height: 1.2;
+      font-weight: 950;
+    }
+
+    .ai-card p {
+      margin: 0 0 1.5rem;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      font-weight: 700;
+    }
+
+    .primary {
+      width: 100%;
+      min-height: 3.25rem;
+      border: 0;
+      border-radius: 1rem;
+      background: var(--lime);
+      color: #111514;
+      font-size: 0.98rem;
+      font-weight: 950;
+      box-shadow: 0 18px 38px rgba(185, 255, 36, 0.24);
+    }
+
+    .plan-panel {
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      gap: 1.2rem;
+    }
+
+    .plan-panel .panel-title {
+      max-width: none;
+      font-size: clamp(2rem, 2.7vw, 3.35rem);
+    }
+
+    .plan-head {
+      margin-top: 0.2rem;
+    }
+
+    .plan-head h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 950;
+    }
+
+    .progress-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin: 1.6rem 0 0.9rem;
+      color: #7c867f;
+      font-size: 0.82rem;
+      font-weight: 850;
+    }
+
+    .percent {
+      color: var(--ink);
+      font-size: 1.5rem;
+      font-weight: 950;
+    }
+
+    .plan-progress {
+      padding: 1.05rem 0 0.9rem;
+      border-radius: 1.25rem;
+      background: transparent;
+      border-bottom: 1px solid rgba(17, 21, 20, 0.08);
+      box-shadow: none;
+    }
+
+    .bar {
+      height: 0.72rem;
+      padding: 0.18rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    .fill {
+      width: 34%;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--lime);
+    }
+
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      margin: 0.85rem 0 1.35rem;
+      color: #808b84;
+      font-size: 0.78rem;
+      font-weight: 900;
+    }
+
+    .today {
+      margin: 0 0 0.8rem;
+      color: #838e87;
+      font-size: 0.82rem;
+      font-weight: 950;
+    }
+
+    .task-list {
+      display: grid;
+      gap: 0.7rem;
+    }
+
+    .plan-board {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 0.9rem;
+      align-content: start;
+    }
+
+    .plan-block {
+      min-height: auto;
+      padding: 0.2rem 0 1rem;
+      border-radius: 0;
+      background: transparent;
+      border-bottom: 1px solid rgba(17, 21, 20, 0.08);
+      box-shadow: none;
+    }
+
+    .plan-block.wide {
+      grid-column: 1 / -1;
+    }
+
+    .block-label {
+      margin: 0 0 0.8rem;
+      color: var(--green);
+      font-size: 0.82rem;
+      font-weight: 950;
+    }
+
+    .mini-list {
+      display: grid;
+      gap: 0;
+      border-radius: 1rem;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .mini-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+      min-height: 2.75rem;
+      padding: 0 0.85rem;
+      color: #151917;
+      font-size: 0.84rem;
+      font-weight: 900;
+      border-bottom: 1px solid rgba(17, 21, 20, 0.06);
+    }
+
+    .mini-row:last-child {
+      border-bottom: 0;
+    }
+
+    .mini-row span:last-child {
+      color: #7b847d;
+      font-size: 0.78rem;
+      white-space: nowrap;
+    }
+
+    .task {
+      min-height: 3.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+      padding: 0 1rem;
+      border-radius: 0;
+      border-bottom: 1px solid rgba(17, 21, 20, 0.06);
+      background: transparent;
+      font-size: 0.84rem;
+      font-weight: 950;
+    }
+
+    .task:last-child {
+      border-bottom: 0;
+    }
+
+    .task-left {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      min-width: 0;
+    }
+
+    .task-badge {
+      width: 1.85rem;
+      height: 1.85rem;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: var(--lime-soft);
+      color: #141915;
+    }
+
+    .task-badge svg {
+      width: 1rem;
+      height: 1rem;
+    }
+
+    .state {
+      color: #7b847d;
+      white-space: nowrap;
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .pill,
-      .stat-card,
-      .camera,
-      .lesson,
-      .ai-card,
-      .primary,
-      .plan-card,
-      .task {
+      .side-nav,
+      .side-item,
+      .entry-card,
+      .work-panel {
         transition: none;
       }
     }
 
-    @media (max-width: 1280px) {
-      body {
-        overflow: auto;
-      }
-
+    @media (max-width: 1100px) {
       .shell {
-        width: auto;
-        height: auto;
-        margin: 18px 18px 24px 260px;
+        width: calc(100% - 288px);
+        padding-right: 1rem;
       }
 
-      .content {
+      .entry-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .work-grid,
+      .analysis-content {
         grid-template-columns: 1fr;
       }
 
-      .right-col {
-        grid-template-rows: auto auto;
+      .ai-card {
+        align-self: stretch;
       }
 
-      .calendar {
-        height: auto;
-      }
     }
 
     @media (max-width: 760px) {
@@ -848,43 +894,68 @@
       }
 
       .shell {
-        margin: 14px;
-        width: auto;
-        height: auto;
+        width: 100%;
+        min-height: auto;
+        margin-left: 0;
+        padding: 1rem;
       }
 
-      .side-nav,
-      .avatar {
+      .side-nav {
         display: none;
       }
 
       .topbar,
-      .top-actions,
-      .headline-row,
-      .filters {
-        display: flex;
-        flex-wrap: wrap;
-        height: auto;
+      .hero-row {
+        align-items: stretch;
+        flex-direction: column;
       }
 
       .brand {
-        width: 100%;
+        font-size: 1.3rem;
+      }
+
+      .brand span {
+        font-size: 0.78rem;
+      }
+
+      .top-actions,
+      .filters {
+        flex-wrap: wrap;
       }
 
       .search {
-        width: calc(100vw - 28px);
+        width: 100%;
+        order: 3;
       }
 
-      .stats {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+      .entry-grid {
+        grid-template-columns: 1fr;
+        padding: 0.8rem;
       }
 
-      .schedule {
-        min-width: 700px;
+      .entry-card {
+        min-height: 8.5rem;
       }
 
-      .calendar {
-        overflow-x: auto;
+      .work-panel {
+        min-height: auto;
+      }
+
+      .panel-title {
+        font-size: 2.25rem;
+        white-space: normal;
+      }
+
+      .ai-card {
+        min-height: auto;
+      }
+
+      .plan-board {
+        grid-template-columns: 1fr;
+      }
+
+      .plan-block.wide {
+        grid-column: auto;
       }
     }
   </style>
@@ -937,129 +1008,154 @@
           <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg>
           搜索资源、文档...
         </div>
-        <div class="round-btn"><svg viewBox="0 0 24 24"><path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 0 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5"/><path d="M10 20h4"/></svg></div>
-        <div class="round-btn"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.4 2.4 0 1 1 3.7 2c-.9.6-1.5 1.1-1.5 2.3"/><path d="M12 17h.01"/></svg></div>
+        <button class="round-btn" type="button" aria-label="通知">
+          <svg viewBox="0 0 24 24"><path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 0 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5"/><path d="M10 20h4"/></svg>
+        </button>
+        <button class="round-btn" type="button" aria-label="帮助">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.4 2.4 0 1 1 3.7 2c-.9.6-1.5 1.1-1.5 2.3"/><path d="M12 17h.01"/></svg>
+        </button>
       </div>
     </header>
 
-    <section class="headline-row">
+    <section class="hero-row">
       <div>
-        <h1>知识库概览</h1>
-        <div class="hello">欢迎回来, 王老师 老师</div>
+        <p class="eyebrow">欢迎回来，王老师</p>
+        <h1>首页</h1>
       </div>
       <div class="filters">
-        <div class="pill"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>本月 <svg viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"/></svg></div>
-        <div class="pill lime"><svg viewBox="0 0 24 24"><path d="M12 3v11"/><path d="m7 10 5 5 5-5"/><path d="M5 19h14"/></svg>导出报表</div>
+        <button class="pill" type="button">
+          <svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>
+          本周
+          <svg viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"/></svg>
+        </button>
+        <button class="pill lime" type="button">
+          <svg viewBox="0 0 24 24"><path d="M12 3v11"/><path d="m7 10 5 5 5-5"/><path d="M5 19h14"/></svg>
+          导出报表
+        </button>
       </div>
     </section>
 
-    <section class="content">
-      <section class="left-col">
-        <div class="stats">
-          <article class="stat-card dark">
-            <h3>总课程数</h3>
-            <strong>24</strong>
-            <svg class="stat-icon" viewBox="0 0 24 24"><path d="m3 9 9-5 9 5-9 5-9-5Z"/><path d="m7 11.5v5l5 3 5-3v-5"/></svg>
-          </article>
-          <article class="stat-card">
-            <h3>PPT 资料</h3>
-            <strong>156</strong>
-            <svg class="stat-icon" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="16" rx="1"/><path d="m10 8 6 4-6 4Z"/></svg>
-          </article>
-          <article class="stat-card">
-            <h3>文档资料</h3>
-            <strong>89</strong>
-            <svg class="stat-icon" viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7Z"/><path d="M14 3v5h5M10 13h6M10 17h6"/></svg>
-          </article>
-          <article class="stat-card">
-            <h3>练习题库</h3>
-            <strong>432</strong>
-            <svg class="stat-icon" viewBox="0 0 24 24"><rect x="8" y="4" width="12" height="16" rx="1"/><path d="M4 8v12h12"/><path d="M14 9a2 2 0 1 1 1.7 2c-.8.2-1.2.8-1.2 1.7"/><path d="M14.5 16h.01"/></svg>
-          </article>
+    <section class="entry-grid" aria-label="核心入口">
+      <article class="entry-card featured" role="button" tabindex="0">
+        <div>
+          <h2>课前准备</h2>
+          <small>教案、资料与课堂任务</small>
+        </div>
+        <span class="entry-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </article>
+      <article class="entry-card" role="button" tabindex="0">
+        <div>
+          <h2>进入课堂</h2>
+          <small>快速开始当前课程</small>
+        </div>
+        <span class="entry-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </article>
+      <article class="entry-card" role="button" tabindex="0">
+        <div>
+          <h2>课后总结</h2>
+          <small>回收反馈与生成纪要</small>
+        </div>
+        <span class="entry-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </article>
+      <article class="entry-card" role="button" tabindex="0">
+        <div>
+          <h2>习题库</h2>
+          <small>按知识点管理练习</small>
+        </div>
+        <span class="entry-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </article>
+    </section>
+
+    <section class="work-grid" aria-label="本周工作区">
+      <article class="work-panel analysis-panel">
+        <div>
+          <p class="panel-kicker">AI 教学建议</p>
+          <h2 class="panel-title">本周教学重点分析</h2>
+          <p class="panel-copy">基于上周测验、课堂互动和错题数据，系统自动整理本周需要优先处理的知识点，并生成可直接使用的复习大纲。</p>
         </div>
 
-        <article class="calendar">
-          <div class="section-title">
-            <span>课程表</span>
-            <span class="camera"><svg viewBox="0 0 24 24"><path d="M7 7h2l1.5-2h3L15 7h2a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-7a3 3 0 0 1 3-3Z"/><circle cx="12" cy="13" r="3"/></svg>拍照导入</span>
+        <div class="analysis-content">
+          <div class="ai-card">
+            <div class="ai-head">
+              <span class="tag">
+                <svg viewBox="0 0 24 24"><path d="M12 3a7 7 0 0 0-7 7v2a4 4 0 0 0 4 4h1v-5H7v-1a5 5 0 0 1 10 0v1h-3v5h1a4 4 0 0 0 4-4v-2a7 7 0 0 0-7-7Z"/><path d="M9 20h6M12 16v4"/></svg>
+                AI 教学建议
+              </span>
+              <svg viewBox="0 0 24 24"><path d="M5 12h.01M12 12h.01M19 12h.01"/></svg>
+            </div>
+            <h3>定积分应用需要重点复习</h3>
+            <p>学生在该知识点的平均错误率上升了 12%，建议安排 15 分钟例题讲解，并补充 2 组分层练习。</p>
+            <button class="primary" type="button">生成复习大纲</button>
           </div>
-          <div class="schedule">
-            <div></div>
-            <div class="day">周一<span>05/25</span></div>
-            <div class="day">周二<span>05/26</span></div>
-            <div class="day">周三<span>05/27</span></div>
-            <div class="day">周四<span>05/28</span></div>
-            <div class="day">周五<span>05/29</span></div>
 
-            <div class="time">08:30</div>
-            <div class="lesson hot"><small>1-2</small>高等数学基础<span>A203</span></div>
-            <div class="lesson empty"></div>
-            <div class="lesson"><small>1-2</small>大学英语四级<span>D405</span></div>
-            <div class="lesson"><small>1-2</small>线性代数<span>B112</span></div>
-            <div class="lesson empty"></div>
-
-            <div class="time">10:20</div>
-            <div class="lesson"><small>3-4</small>线性代数<span>B112</span></div>
-            <div class="lesson"><small>3-4</small>Python 数据分析<span>机房 2</span></div>
-            <div class="lesson empty"></div>
-            <div class="lesson"><small>3-4</small>概率统计<span>C301</span></div>
-            <div class="lesson"><small>3-4</small>Python 实训<span>机房 2</span></div>
-
-            <div class="time">14:00</div>
-            <div class="lesson empty"></div>
-            <div class="lesson"><small>5-6</small>概率统计<span>C301</span></div>
-            <div class="lesson"><small>5-6</small>微积分专题<span>A203</span></div>
-            <div class="lesson empty"></div>
-            <div class="lesson"><small>5-6</small>复习课<span>A203</span></div>
-
-            <div class="time">15:50</div>
-            <div class="lesson"><small>7-8</small>习题讲评<span>A203</span></div>
-            <div class="lesson empty"></div>
-            <div class="lesson"><small>7-8</small>答疑辅导<span>线上</span></div>
-            <div class="lesson empty"></div>
-            <div class="lesson empty"></div>
+          <div class="plan-block">
+            <p class="block-label">本周风险知识点</p>
+            <div class="mini-list">
+              <div class="mini-row"><strong>定积分应用</strong><span>错误率 +12%</span></div>
+              <div class="mini-row"><strong>极限计算</strong><span>需补 6 道题</span></div>
+              <div class="mini-row"><strong>函数连续性</strong><span>3 个班级薄弱</span></div>
+              <div class="mini-row"><strong>建议处理</strong><span>例题讲解 + 分层练习</span></div>
+            </div>
           </div>
-        </article>
-      </section>
+        </div>
+      </article>
 
-      <aside class="right-col">
-        <article class="ai-card">
-          <div class="ai-head">
-            <span class="tag"><svg viewBox="0 0 24 24"><path d="M12 3a7 7 0 0 0-7 7v2a4 4 0 0 0 4 4h1v-5H7v-1a5 5 0 0 1 10 0v1h-3v5h1a4 4 0 0 0 4-4v-2a7 7 0 0 0-7-7Z"/><path d="M9 20h6M12 16v4"/></svg>AI 教学建议</span>
-            <svg viewBox="0 0 24 24"><path d="M5 12h.01M12 12h.01M19 12h.01"/></svg>
+      <article class="work-panel plan-panel">
+        <div class="plan-head">
+          <div>
+            <p class="panel-kicker">备课进度</p>
+            <h2 class="panel-title">本周备课计划</h2>
           </div>
-          <h2>本周教学重点分析</h2>
-          <p>基于上周《高等数学》测验数据，建议重点复习“定积分应用”章节。学生在该知识点的平均错误率上升了12%。</p>
-          <button class="primary">生成复习大纲</button>
-        </article>
+          <svg viewBox="0 0 24 24"><path d="M12 5h.01M12 12h.01M12 19h.01"/></svg>
+        </div>
 
-        <article class="plan-card">
-          <div class="section-title">本周备课计划 <svg viewBox="0 0 24 24"><path d="M12 5h.01M12 12h.01M12 19h.01"/></svg></div>
+        <div class="plan-progress">
           <div class="progress-row">
             <span>本周材料完成度</span>
             <span class="percent">34%</span>
           </div>
           <div class="bar"><div class="fill"></div></div>
           <div class="meta"><span>0 项完成</span><span>目标: 3 项</span></div>
-          <div class="today">今日待推进</div>
-          <div class="task-list">
-            <div class="task">
-              <span class="task-left">
-                <span class="task-badge"><svg viewBox="0 0 24 24"><path d="M8 7h8M8 12h6M8 17h4"/><path d="M18 14l2 2-4 4h-2v-2Z"/></svg></span>
-                完善课程资料
-              </span>
-              <span class="state">待整理</span>
-            </div>
-            <div class="task">
-              <span class="task-left">
-                <span class="task-badge"><svg viewBox="0 0 24 24"><path d="M6 7h12M6 12h7M6 17h9"/><path d="M18 16h.01"/></svg></span>
-                生成课堂练习
-              </span>
-              <span class="state">去生成</span>
+        </div>
+
+        <div class="plan-board">
+          <div class="plan-block wide">
+            <p class="block-label">今日待推进</p>
+            <div class="task-list">
+              <div class="task">
+                <span class="task-left">
+                  <span class="task-badge"><svg viewBox="0 0 24 24"><path d="M8 7h8M8 12h6M8 17h4"/><path d="M18 14l2 2-4 4h-2v-2Z"/></svg></span>
+                  完善《定积分应用》课件
+                </span>
+                <span class="state">待整理</span>
+              </div>
+              <div class="task">
+                <span class="task-left">
+                  <span class="task-badge"><svg viewBox="0 0 24 24"><path d="M6 7h12M6 12h7M6 17h9"/><path d="M18 16h.01"/></svg></span>
+                  生成课堂分层练习
+                </span>
+                <span class="state">去生成</span>
+              </div>
             </div>
           </div>
-        </article>
-      </aside>
+          <div class="plan-block">
+            <p class="block-label">待准备课程</p>
+            <div class="mini-list">
+              <div class="mini-row"><strong>高等数学</strong><span>周一 08:30</span></div>
+              <div class="mini-row"><strong>线性代数</strong><span>周四 10:20</span></div>
+              <div class="mini-row"><strong>习题讲评</strong><span>周五 14:00</span></div>
+            </div>
+          </div>
+          <div class="plan-block">
+            <p class="block-label">资料缺口</p>
+            <div class="mini-list">
+              <div class="mini-row"><strong>PPT 更新</strong><span>1 份</span></div>
+              <div class="mini-row"><strong>课堂练习</strong><span>2 组</span></div>
+              <div class="mini-row"><strong>错题讲义</strong><span>未生成</span></div>
+            </div>
+          </div>
+        </div>
+      </article>
     </section>
   </main>
 </body>
