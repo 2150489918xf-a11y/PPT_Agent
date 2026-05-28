@@ -257,17 +257,19 @@
     }
     .ai-msg {
       display: grid; justify-self: start; max-width: 88%;
-      padding: 14px 20px; border: 1px solid rgba(255, 255, 255, 0.85);
-      border-radius: 20px; background: rgba(255, 255, 255, 0.68);
-      box-shadow: 0 4px 12px rgba(43, 58, 45, 0.03);
+      padding: 14px 20px; border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: 20px; background: rgba(255, 255, 255, 0.58);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 8px 24px rgba(43, 58, 45, 0.05);
     }
     .ai-msg.user {
       justify-self: end;
       border-radius: 20px;
-      background: #111416;
+      background: rgba(17, 20, 22, 0.82);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
       color: #ffffff;
-      border: none;
-      box-shadow: 0 8px 24px rgba(17, 20, 22, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 10px 28px rgba(17, 20, 22, 0.18);
     }
     .ai-msg.user p { color: #ffffff; }
     .ai-msg p { margin: 0; color: #2c332e; font-size: 14px; line-height: 1.6; overflow-wrap: anywhere; }
