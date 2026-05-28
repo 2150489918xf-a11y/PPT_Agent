@@ -507,6 +507,29 @@
       font-weight: 850;
     }
 
+    .entry-meta {
+      width: fit-content;
+      margin-top: 1.1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.38rem 0.62rem;
+      border-radius: 999px;
+      background: rgba(17, 21, 20, 0.06);
+      color: #344039;
+      font-size: 0.75rem;
+      font-weight: 950;
+    }
+
+    .entry-meta::before {
+      content: "";
+      width: 0.42rem;
+      height: 0.42rem;
+      border-radius: 50%;
+      background: var(--lime);
+      box-shadow: 0 0 0 4px rgba(185, 255, 36, 0.18);
+    }
+
     .entry-arrow {
       position: absolute;
       right: 1.25rem;
@@ -532,6 +555,11 @@
 
     .entry-card.featured small {
       color: rgba(255, 255, 255, 0.68);
+    }
+
+    .entry-card.featured .entry-meta {
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.82);
     }
 
     .entry-card.featured .entry-arrow {
@@ -614,6 +642,31 @@
       font-weight: 720;
     }
 
+    .signal-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin-top: 1.05rem;
+    }
+
+    .signal {
+      min-height: 2.3rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0 0.8rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.46);
+      color: #445047;
+      font-size: 0.78rem;
+      font-weight: 950;
+    }
+
+    .signal strong {
+      color: #111514;
+      font-size: 0.95rem;
+    }
+
     .ai-card {
       align-self: start;
       min-height: 19rem;
@@ -660,6 +713,100 @@
       font-size: 0.9rem;
       line-height: 1.7;
       font-weight: 700;
+    }
+
+    .diagnosis-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      padding-top: 0.2rem;
+    }
+
+    .diagnosis-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 1rem;
+      color: var(--green);
+      font-size: 0.88rem;
+      font-weight: 950;
+    }
+
+    .diagnosis-head span:last-child {
+      color: #7b847d;
+      font-size: 0.76rem;
+      white-space: nowrap;
+    }
+
+    .risk-list {
+      display: grid;
+      gap: 0.68rem;
+    }
+
+    .risk-item {
+      padding: 0.9rem 0;
+      border-bottom: 1px solid rgba(17, 21, 20, 0.08);
+    }
+
+    .risk-item:last-child {
+      border-bottom: 0;
+    }
+
+    .risk-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 0.62rem;
+      font-size: 0.92rem;
+      font-weight: 950;
+    }
+
+    .risk-tag {
+      padding: 0.25rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(185, 255, 36, 0.22);
+      color: #176843;
+      font-size: 0.72rem;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
+    .risk-bar {
+      height: 0.42rem;
+      border-radius: 999px;
+      background: rgba(17, 21, 20, 0.07);
+      overflow: hidden;
+    }
+
+    .risk-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--lime), #6dbb3b);
+    }
+
+    .action-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.7rem;
+      margin-top: 0.5rem;
+    }
+
+    .action-step {
+      min-height: 4.2rem;
+      padding: 0.78rem;
+      border-radius: 1rem;
+      background: rgba(255, 255, 255, 0.42);
+      color: #5f6962;
+      font-size: 0.74rem;
+      font-weight: 850;
+    }
+
+    .action-step strong {
+      display: block;
+      margin-bottom: 0.25rem;
+      color: #111514;
+      font-size: 0.9rem;
     }
 
     .primary {
@@ -717,6 +864,44 @@
       background: transparent;
       border-bottom: 1px solid rgba(17, 21, 20, 0.08);
       box-shadow: none;
+    }
+
+    .next-class {
+      padding: 1.05rem 1.1rem;
+      border-radius: 1.2rem;
+      background:
+        radial-gradient(circle at 92% 0%, rgba(185, 255, 36, 0.18), transparent 8rem),
+        rgba(255, 255, 255, 0.42);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+
+    .next-class-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      color: #7b847d;
+      font-size: 0.78rem;
+      font-weight: 900;
+      margin-bottom: 0.8rem;
+    }
+
+    .next-class-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      font-size: 1.05rem;
+      font-weight: 950;
+    }
+
+    .ready-chip {
+      padding: 0.35rem 0.58rem;
+      border-radius: 999px;
+      background: var(--lime);
+      color: #111514;
+      font-size: 0.72rem;
+      font-weight: 950;
+      white-space: nowrap;
     }
 
     .bar {
@@ -1040,6 +1225,7 @@
         <div>
           <h2>课前准备</h2>
           <small>教案、资料与课堂任务</small>
+          <span class="entry-meta">3 项待处理</span>
         </div>
         <span class="entry-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
       </article>
@@ -1047,6 +1233,7 @@
         <div>
           <h2>进入课堂</h2>
           <small>快速开始当前课程</small>
+          <span class="entry-meta">下一节 08:30</span>
         </div>
         <span class="entry-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
       </article>
@@ -1054,6 +1241,7 @@
         <div>
           <h2>课后总结</h2>
           <small>回收反馈与生成纪要</small>
+          <span class="entry-meta">2 份待生成</span>
         </div>
         <span class="entry-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
       </article>
@@ -1061,6 +1249,7 @@
         <div>
           <h2>习题库</h2>
           <small>按知识点管理练习</small>
+          <span class="entry-meta">432 道题</span>
         </div>
         <span class="entry-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
       </article>
@@ -1072,6 +1261,11 @@
           <p class="panel-kicker">AI 教学建议</p>
           <h2 class="panel-title">本周教学重点分析</h2>
           <p class="panel-copy">基于上周测验、课堂互动和错题数据，系统自动整理本周需要优先处理的知识点，并生成可直接使用的复习大纲。</p>
+          <div class="signal-row">
+            <span class="signal"><strong>128</strong> 条课堂数据</span>
+            <span class="signal"><strong>5</strong> 个薄弱点</span>
+            <span class="signal"><strong>12%</strong> 错误率上升</span>
+          </div>
         </div>
 
         <div class="analysis-content">
@@ -1088,13 +1282,29 @@
             <button class="primary" type="button">生成复习大纲</button>
           </div>
 
-          <div class="plan-block">
-            <p class="block-label">本周风险知识点</p>
-            <div class="mini-list">
-              <div class="mini-row"><strong>定积分应用</strong><span>错误率 +12%</span></div>
-              <div class="mini-row"><strong>极限计算</strong><span>需补 6 道题</span></div>
-              <div class="mini-row"><strong>函数连续性</strong><span>3 个班级薄弱</span></div>
-              <div class="mini-row"><strong>建议处理</strong><span>例题讲解 + 分层练习</span></div>
+          <div class="diagnosis-panel">
+            <div class="diagnosis-head">
+              <span>本周风险诊断</span>
+              <span>按错误率排序</span>
+            </div>
+            <div class="risk-list">
+              <div class="risk-item">
+                <div class="risk-top"><span>定积分应用</span><span class="risk-tag">错误率 +12%</span></div>
+                <div class="risk-bar"><div class="risk-fill" style="width: 78%"></div></div>
+              </div>
+              <div class="risk-item">
+                <div class="risk-top"><span>极限计算</span><span class="risk-tag">需补 6 题</span></div>
+                <div class="risk-bar"><div class="risk-fill" style="width: 58%"></div></div>
+              </div>
+              <div class="risk-item">
+                <div class="risk-top"><span>函数连续性</span><span class="risk-tag">3 个班薄弱</span></div>
+                <div class="risk-bar"><div class="risk-fill" style="width: 46%"></div></div>
+              </div>
+            </div>
+            <div class="action-strip">
+              <div class="action-step"><strong>讲解</strong>15 分钟例题拆解</div>
+              <div class="action-step"><strong>练习</strong>2 组分层训练</div>
+              <div class="action-step"><strong>回收</strong>课后错题追踪</div>
             </div>
           </div>
         </div>
@@ -1116,6 +1326,17 @@
           </div>
           <div class="bar"><div class="fill"></div></div>
           <div class="meta"><span>0 项完成</span><span>目标: 3 项</span></div>
+        </div>
+
+        <div class="next-class">
+          <div class="next-class-top">
+            <span>下一节课</span>
+            <span>周一 08:30 · A203</span>
+          </div>
+          <div class="next-class-title">
+            <span>高等数学 · 定积分应用</span>
+            <span class="ready-chip">34% 就绪</span>
+          </div>
         </div>
 
         <div class="plan-board">
