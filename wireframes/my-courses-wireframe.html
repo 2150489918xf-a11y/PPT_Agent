@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
@@ -32,6 +32,7 @@
       font: inherit;
       color: inherit;
       background: transparent;
+      text-decoration: none;
     }
 
     .app {
@@ -181,6 +182,8 @@
       background: var(--strong);
       color: #fff;
       font-weight: 700;
+      display: grid;
+      place-items: center;
     }
 
     .action.large {
@@ -407,6 +410,9 @@
       min-width: 110px;
       border: 1px solid #777;
       font-weight: 700;
+      display: grid;
+      place-items: center;
+      text-decoration: none;
     }
 
     .line-button.primary {
@@ -449,12 +455,12 @@
         <p>我的课程原型</p>
       </div>
       <nav class="nav" aria-label="主导航">
-        <a href="eduai-workbench-wireframe.html"><span class="icon"></span>首页</a>
-        <a class="active" href="my-courses-wireframe.html"><span class="icon"></span>课前</a>
-        <a href="in-class-ppt-wireframe.html"><span class="icon"></span>课中</a>
-        <a href="after-class-wireframe.html"><span class="icon"></span>课后</a>
-        <a href="question-bank-wireframe.html"><span class="icon"></span>题库</a>
-        <a href="#"><span class="icon"></span>知识库</a>
+        <a href="eduai-workbench-wireframe.html">首页</a>
+        <a class="active" href="my-courses-wireframe.html">课前</a>
+        <a href="in-class-ppt-wireframe.html">课中</a>
+        <a href="after-class-wireframe.html">课后</a>
+        <a href="question-bank-wireframe.html">题库</a>
+        <a href="knowledge-base-wireframe.html">知识库</a>
       </nav>
     </aside>
 
@@ -547,11 +553,9 @@
               <section class="detail-card">
                 <div class="detail-head">
                   <div>
-                    <div class="status">未开始</div>
                     <h2>初二 · 牛顿第二定律</h2>
                     <p>初二 · 物理 · 45 分钟</p>
                   </div>
-                  <a class="line-button primary" href="workspace-wireframe.html">继续设计</a>
                 </div>
 
                 <table class="detail-table">
@@ -585,8 +589,6 @@
 
                 <div class="detail-actions">
                   <a class="line-button primary" href="workspace-wireframe.html">继续设计</a>
-                  <button class="line-button" type="button">导出课程</button>
-                  <button class="line-button" type="button">复制课程</button>
                 </div>
               </section>
 
