@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>课后分析入口线框原型</title>
+  <style>
+    :root {
+      --ink: #111;
+      --muted: #555;
+      --line: #c7c7c7;
+      --strong: #222;
+      --bg: #efefef;
+      --white: #fff;
+      --panel: #f7f7f7;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background: var(--bg);
+      font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+    }
+
+    button,
+    input {
+      font: inherit;
+      color: inherit;
+      background: transparent;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 160px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      border-right: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .side-title {
+      height: 116px;
+      padding: 16px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .side-title h2 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .side-title p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .nav {
+      display: grid;
+    }
+
+    .nav a {
+      height: 54px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 14px;
+      border-bottom: 1px solid var(--line);
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    .nav a.active {
+      background: var(--strong);
+      color: #fff;
+    }
+
+    .icon {
+      width: 16px;
+      height: 16px;
+      border: 2px solid currentColor;
+      flex: 0 0 auto;
+    }
+
+    .main {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      min-height: 116px;
+      padding: 14px 18px 16px;
+      border-bottom: 2px solid #1686ff;
+      background: var(--white);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .crumb {
+      margin: 0 0 6px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .page-title {
+      margin: 0;
+      font-size: 36px;
+      line-height: 1.05;
+    }
+
+    .page-desc {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .top-actions {
+      display: grid;
+      gap: 10px;
+      justify-items: end;
+    }
+
+    .search {
+      width: 360px;
+      height: 38px;
+      border: 1px solid #999;
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      background: #fafafa;
+    }
+
+    .search-mark {
+      width: 14px;
+      height: 14px;
+      border: 2px solid #777;
+      position: relative;
+    }
+
+    .search-mark::after {
+      content: "";
+      position: absolute;
+      right: -7px;
+      bottom: -4px;
+      width: 8px;
+      height: 2px;
+      background: #777;
+      transform: rotate(45deg);
+    }
+
+    .content {
+      padding: 20px;
+      display: grid;
+      gap: 20px;
+    }
+
+    .filter-bar {
+      border: 1px solid var(--line);
+      background: var(--white);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+      padding: 14px;
+    }
+
+    .tabs,
+    .sorts {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tab,
+    .sort {
+      min-width: 96px;
+      height: 34px;
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      background: #fafafa;
+    }
+
+    .tab.active {
+      background: var(--strong);
+      color: #fff;
+      border-color: var(--strong);
+    }
+
+    .course-table {
+      border: 1px solid var(--line);
+      background: var(--white);
+    }
+
+    .table-head,
+    .course-row {
+      display: grid;
+      grid-template-columns: minmax(260px, 1.3fr) 130px 130px 150px 270px;
+      align-items: center;
+      min-height: 68px;
+    }
+
+    .table-head {
+      min-height: 46px;
+      border-bottom: 1px solid var(--line);
+      background: #fafafa;
+      font-weight: 800;
+    }
+
+    .course-row {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .course-row:last-child {
+      border-bottom: 0;
+    }
+
+    .cell {
+      height: 100%;
+      min-width: 0;
+      padding: 12px 14px;
+      border-right: 1px solid var(--line);
+      display: grid;
+      align-content: center;
+      gap: 5px;
+    }
+
+    .cell:last-child {
+      border-right: 0;
+    }
+
+    .course-name {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.25;
+    }
+
+    .sub {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .stage-actions {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .stage-btn {
+      height: 34px;
+      border: 1px solid var(--strong);
+      background: var(--white);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 1180px) {
+      .table-head,
+      .course-row {
+        grid-template-columns: minmax(220px, 1.2fr) 110px 110px 130px 250px;
+      }
+    }
+
+    @media (max-width: 920px) {
+      .app {
+        grid-template-columns: 132px minmax(0, 1fr);
+      }
+
+      .topbar,
+      .filter-bar {
+        grid-template-columns: 1fr;
+      }
+
+      .top-actions {
+        justify-items: start;
+      }
+
+      .search {
+        width: min(100%, 360px);
+      }
+
+      .course-table {
+        overflow-x: auto;
+      }
+
+      .table-head,
+      .course-row {
+        min-width: 880px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="side-title">
+        <h2>课后</h2>
+        <p>分析入口原型</p>
+      </div>
+      <nav class="nav" aria-label="主导航">
+        <a href="eduai-workbench-wireframe.html"><span class="icon"></span>首页</a>
+        <a href="my-courses-wireframe.html"><span class="icon"></span>课前</a>
+        <a href="in-class-ppt-wireframe.html"><span class="icon"></span>课中</a>
+        <a class="active" href="#"><span class="icon"></span>课后</a>
+        <a href="question-bank-wireframe.html"><span class="icon"></span>题库</a>
+        <a href="#"><span class="icon"></span>知识库</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="crumb">当前位置：首页 / 课后</p>
+          <h1 class="page-title">课后分析</h1>
+          <p class="page-desc">选择课程后进入课前、课中或课后的阶段分析页面，查看不同教学阶段的数据与建议。</p>
+        </div>
+        <div class="top-actions">
+          <div class="search">
+            <span class="search-mark"></span>
+            <span>搜索课程、班级、教师</span>
+          </div>
+        </div>
+      </header>
+
+      <section class="content">
+        <div class="filter-bar">
+          <div class="tabs" aria-label="课程筛选">
+            <button class="tab active">全部课程</button>
+            <button class="tab">本周课程</button>
+            <button class="tab">已完成</button>
+            <button class="tab">待分析</button>
+          </div>
+          <div class="sorts" aria-label="排序方式">
+            <button class="sort">最近上课</button>
+            <button class="sort">按班级</button>
+            <button class="sort">按学科</button>
+          </div>
+        </div>
+
+        <section class="course-table" aria-label="课程列表">
+          <div class="table-head">
+            <div class="cell">课程信息</div>
+            <div class="cell">学科</div>
+            <div class="cell">班级</div>
+            <div class="cell">上课时间</div>
+            <div class="cell">阶段分析</div>
+          </div>
+
+          <article class="course-row">
+            <div class="cell">
+              <h2 class="course-name">牛顿第二定律</h2>
+              <span class="sub">高中物理 · 12 页 PPT · 86 道关联题</span>
+            </div>
+            <div class="cell"><strong>物理</strong></div>
+            <div class="cell"><strong>高一 3 班</strong></div>
+            <div class="cell"><strong>今天 09:20</strong></div>
+            <div class="cell">
+              <div class="stage-actions">
+                <button class="stage-btn">课前</button>
+                <button class="stage-btn">课中</button>
+                <button class="stage-btn">课后</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="course-row">
+            <div class="cell">
+              <h2 class="course-name">平面直角坐标系</h2>
+              <span class="sub">七年级数学 · 18 页 PPT · 72 道关联题</span>
+            </div>
+            <div class="cell"><strong>数学</strong></div>
+            <div class="cell"><strong>七年级 2 班</strong></div>
+            <div class="cell"><strong>昨天 14:00</strong></div>
+            <div class="cell">
+              <div class="stage-actions">
+                <button class="stage-btn">课前</button>
+                <button class="stage-btn">课中</button>
+                <button class="stage-btn">课后</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="course-row">
+            <div class="cell">
+              <h2 class="course-name">质量守恒定律</h2>
+              <span class="sub">九年级化学 · 实验课 · 61 道关联题</span>
+            </div>
+            <div class="cell"><strong>化学</strong></div>
+            <div class="cell"><strong>九年级 1 班</strong></div>
+            <div class="cell"><strong>周三 10:10</strong></div>
+            <div class="cell">
+              <div class="stage-actions">
+                <button class="stage-btn">课前</button>
+                <button class="stage-btn">课中</button>
+                <button class="stage-btn">课后</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="course-row">
+            <div class="cell">
+              <h2 class="course-name">惯性与运动状态</h2>
+              <span class="sub">八年级物理 · 探究课 · 54 道关联题</span>
+            </div>
+            <div class="cell"><strong>物理</strong></div>
+            <div class="cell"><strong>八年级 4 班</strong></div>
+            <div class="cell"><strong>周二 15:30</strong></div>
+            <div class="cell">
+              <div class="stage-actions">
+                <button class="stage-btn">课前</button>
+                <button class="stage-btn">课中</button>
+                <button class="stage-btn">课后</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="course-row">
+            <div class="cell">
+              <h2 class="course-name">一次函数图像</h2>
+              <span class="sub">八年级数学 · 概念建构 · 48 道关联题</span>
+            </div>
+            <div class="cell"><strong>数学</strong></div>
+            <div class="cell"><strong>八年级 1 班</strong></div>
+            <div class="cell"><strong>本周一</strong></div>
+            <div class="cell">
+              <div class="stage-actions">
+                <button class="stage-btn">课前</button>
+                <button class="stage-btn">课中</button>
+                <button class="stage-btn">课后</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="course-row">
+            <div class="cell">
+              <h2 class="course-name">浮力与密度</h2>
+              <span class="sub">八年级物理 · 复习课 · 66 道关联题</span>
+            </div>
+            <div class="cell"><strong>物理</strong></div>
+            <div class="cell"><strong>八年级 5 班</strong></div>
+            <div class="cell"><strong>上周五</strong></div>
+            <div class="cell">
+              <div class="stage-actions">
+                <button class="stage-btn">课前</button>
+                <button class="stage-btn">课中</button>
+                <button class="stage-btn">课后</button>
+              </div>
+            </div>
+          </article>
+        </section>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

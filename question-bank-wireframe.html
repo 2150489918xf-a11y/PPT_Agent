@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>题库页线框原型</title>
+  <style>
+    :root {
+      --ink: #111;
+      --muted: #555;
+      --line: #c7c7c7;
+      --strong: #222;
+      --bg: #efefef;
+      --white: #fff;
+      --panel: #f7f7f7;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background: var(--bg);
+      font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+    }
+
+    button,
+    input {
+      font: inherit;
+      color: inherit;
+      background: transparent;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 160px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      border-right: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .side-title {
+      height: 116px;
+      padding: 16px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .side-title h2 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .side-title p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .nav {
+      display: grid;
+    }
+
+    .nav a {
+      height: 54px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 14px;
+      border-bottom: 1px solid var(--line);
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    .nav a.active {
+      background: var(--strong);
+      color: #fff;
+    }
+
+    .icon {
+      width: 16px;
+      height: 16px;
+      border: 2px solid currentColor;
+      flex: 0 0 auto;
+    }
+
+    .main {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      min-height: 116px;
+      padding: 14px 18px 16px;
+      border-bottom: 2px solid #1686ff;
+      background: var(--white);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .crumb {
+      margin: 0 0 6px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .page-title {
+      margin: 0;
+      font-size: 36px;
+      line-height: 1.05;
+    }
+
+    .page-desc {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .top-actions {
+      display: grid;
+      gap: 10px;
+      justify-items: end;
+    }
+
+    .search {
+      width: 360px;
+      height: 38px;
+      border: 1px solid #999;
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      background: #fafafa;
+    }
+
+    .search-mark {
+      width: 14px;
+      height: 14px;
+      border: 2px solid #777;
+      position: relative;
+    }
+
+    .search-mark::after {
+      content: "";
+      position: absolute;
+      right: -7px;
+      bottom: -4px;
+      width: 8px;
+      height: 2px;
+      background: #777;
+      transform: rotate(45deg);
+    }
+
+    .action {
+      height: 40px;
+      min-width: 148px;
+      border: 1px solid var(--strong);
+      background: var(--strong);
+      color: #fff;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .content {
+      padding: 20px;
+      display: grid;
+      gap: 20px;
+    }
+
+    .filter-bar {
+      border: 1px solid var(--line);
+      background: var(--white);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+      padding: 14px;
+    }
+
+    .tabs,
+    .sorts {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tab,
+    .sort {
+      min-width: 96px;
+      height: 34px;
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      background: #fafafa;
+    }
+
+    .tab.active {
+      background: var(--strong);
+      color: #fff;
+      border-color: var(--strong);
+    }
+
+    .bank-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .bank-card {
+      min-width: 0;
+      border: 1px solid var(--line);
+      background: var(--white);
+      display: grid;
+      grid-template-rows: 158px auto;
+    }
+
+    .folder-preview {
+      border-bottom: 1px solid var(--line);
+      background: #fafafa;
+      padding: 16px;
+      display: grid;
+      place-items: center;
+    }
+
+    .folder-shape {
+      width: min(80%, 280px);
+      height: 104px;
+      border: 2px solid var(--strong);
+      background: var(--white);
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .card-info {
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .card-title-row {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .card-title-row h3 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.25;
+    }
+
+    .badge {
+      min-width: 86px;
+      height: 28px;
+      padding: 0 8px;
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .title-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 0 0 auto;
+    }
+
+    .bank-meta {
+      display: block;
+      border: 1px solid var(--line);
+    }
+
+    .meta-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      border-bottom: 1px solid var(--line);
+    }
+
+    .meta-item {
+      min-height: 54px;
+      padding: 8px 10px;
+      border-right: 1px solid var(--line);
+      display: grid;
+      align-content: center;
+      gap: 4px;
+    }
+
+    .meta-item:last-child {
+      border-right: 0;
+    }
+
+    .meta-item.wide {
+      border-right: 0;
+    }
+
+    .meta-item span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .meta-item strong {
+      font-size: 15px;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+    }
+
+    .plain-btn {
+      height: 28px;
+      min-width: 88px;
+      border: 1px solid var(--strong);
+      background: var(--white);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 1280px) {
+      .bank-grid {
+        grid-template-columns: repeat(2, minmax(260px, 1fr));
+      }
+    }
+
+    @media (max-width: 920px) {
+      .app {
+        grid-template-columns: 132px minmax(0, 1fr);
+      }
+
+      .topbar,
+      .filter-bar {
+        grid-template-columns: 1fr;
+      }
+
+      .top-actions {
+        justify-items: start;
+      }
+
+      .search {
+        width: min(100%, 360px);
+      }
+
+      .bank-grid,
+      .meta-row {
+        grid-template-columns: 1fr;
+      }
+
+      .meta-item {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .meta-item:last-child {
+        border-bottom: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="side-title">
+        <h2>题库</h2>
+        <p>题库陈列原型</p>
+      </div>
+      <nav class="nav" aria-label="主导航">
+        <a href="eduai-workbench-wireframe.html"><span class="icon"></span>首页</a>
+        <a href="my-courses-wireframe.html"><span class="icon"></span>课前</a>
+        <a href="in-class-ppt-wireframe.html"><span class="icon"></span>课中</a>
+        <a href="#"><span class="icon"></span>课后</a>
+        <a class="active" href="#"><span class="icon"></span>题库</a>
+        <a href="#"><span class="icon"></span>知识库</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="crumb">当前位置：首页 / 题库</p>
+          <h1 class="page-title">题库</h1>
+          <p class="page-desc">集中展示不同课程、章节和课堂场景下的题库，方便老师快速查看和管理。</p>
+        </div>
+        <div class="top-actions">
+          <div class="search">
+            <span class="search-mark"></span>
+            <span>搜索题库、课程、知识点</span>
+          </div>
+          <button class="action">+ 新建题库</button>
+        </div>
+      </header>
+
+      <section class="content">
+        <div class="filter-bar">
+          <div class="tabs" aria-label="题库筛选">
+            <button class="tab active">全部题库</button>
+            <button class="tab">物理</button>
+            <button class="tab">数学</button>
+            <button class="tab">化学</button>
+            <button class="tab">课堂练习</button>
+          </div>
+          <div class="sorts" aria-label="排序方式">
+            <button class="sort">最近更新</button>
+            <button class="sort">按课程</button>
+            <button class="sort">按题量</button>
+          </div>
+        </div>
+
+        <section class="bank-grid" aria-label="题库列表">
+          <article class="bank-card">
+            <div class="folder-preview">
+              <div class="folder-shape">牛顿定律<br />题库</div>
+            </div>
+            <div class="card-info">
+              <div class="card-title-row">
+                <h3>牛顿定律课堂题库</h3>
+                <div class="title-actions">
+                  <span class="badge">已整理 · 今天</span>
+                  <button class="plain-btn">进入题库</button>
+                </div>
+              </div>
+              <div class="bank-meta">
+                <div class="meta-row">
+                  <div class="meta-item">
+                    <span>所属课程</span>
+                    <strong>高中物理</strong>
+                  </div>
+                  <div class="meta-item">
+                    <span>题目数量</span>
+                    <strong>86 题</strong>
+                  </div>
+                </div>
+                <div class="meta-item wide">
+                  <span>题型构成</span>
+                  <strong>选择42 / 计算18 / 应用26</strong>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="bank-card">
+            <div class="folder-preview">
+              <div class="folder-shape">惯性专题<br />题库</div>
+            </div>
+            <div class="card-info">
+              <div class="card-title-row">
+                <h3>惯性与运动状态</h3>
+                <div class="title-actions">
+                  <span class="badge">课堂用 · 昨天</span>
+                  <button class="plain-btn">进入题库</button>
+                </div>
+              </div>
+              <div class="bank-meta">
+                <div class="meta-row">
+                  <div class="meta-item">
+                    <span>所属课程</span>
+                    <strong>八年级物理</strong>
+                  </div>
+                  <div class="meta-item">
+                    <span>题目数量</span>
+                    <strong>54 题</strong>
+                  </div>
+                </div>
+                <div class="meta-item wide">
+                  <span>题型构成</span>
+                  <strong>判断16 / 选择24 / 辨析14</strong>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="bank-card">
+            <div class="folder-preview">
+              <div class="folder-shape">函数图像<br />题库</div>
+            </div>
+            <div class="card-info">
+              <div class="card-title-row">
+                <h3>一次函数图像题库</h3>
+                <div class="title-actions">
+                  <span class="badge">待检查 · 周三</span>
+                  <button class="plain-btn">进入题库</button>
+                </div>
+              </div>
+              <div class="bank-meta">
+                <div class="meta-row">
+                  <div class="meta-item">
+                    <span>所属课程</span>
+                    <strong>八年级数学</strong>
+                  </div>
+                  <div class="meta-item">
+                    <span>题目数量</span>
+                    <strong>72 题</strong>
+                  </div>
+                </div>
+                <div class="meta-item wide">
+                  <span>题型构成</span>
+                  <strong>选择30 / 填空20 / 解答22</strong>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="bank-card">
+            <div class="folder-preview">
+              <div class="folder-shape">质量守恒<br />题库</div>
+            </div>
+            <div class="card-info">
+              <div class="card-title-row">
+                <h3>质量守恒定律题库</h3>
+                <div class="title-actions">
+                  <span class="badge">已确认 · 本周</span>
+                  <button class="plain-btn">进入题库</button>
+                </div>
+              </div>
+              <div class="bank-meta">
+                <div class="meta-row">
+                  <div class="meta-item">
+                    <span>所属课程</span>
+                    <strong>九年级化学</strong>
+                  </div>
+                  <div class="meta-item">
+                    <span>题目数量</span>
+                    <strong>61 题</strong>
+                  </div>
+                </div>
+                <div class="meta-item wide">
+                  <span>题型构成</span>
+                  <strong>实验18 / 选择25 / 推断18</strong>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="bank-card">
+            <div class="folder-preview">
+              <div class="folder-shape">课堂检测<br />题库</div>
+            </div>
+            <div class="card-info">
+              <div class="card-title-row">
+                <h3>随堂检测通用题库</h3>
+                <div class="title-actions">
+                  <span class="badge">常用 · 今天</span>
+                  <button class="plain-btn">进入题库</button>
+                </div>
+              </div>
+              <div class="bank-meta">
+                <div class="meta-row">
+                  <div class="meta-item">
+                    <span>所属课程</span>
+                    <strong>跨学科</strong>
+                  </div>
+                  <div class="meta-item">
+                    <span>题目数量</span>
+                    <strong>128 题</strong>
+                  </div>
+                </div>
+                <div class="meta-item wide">
+                  <span>题型构成</span>
+                  <strong>出口36 / 抢答40 / 巩固52</strong>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="bank-card">
+            <div class="folder-preview">
+              <div class="folder-shape">错题复盘<br />题库</div>
+            </div>
+            <div class="card-info">
+              <div class="card-title-row">
+                <h3>学生高频错题库</h3>
+                <div class="title-actions">
+                  <span class="badge">自动汇总 · 实时</span>
+                  <button class="plain-btn">进入题库</button>
+                </div>
+              </div>
+              <div class="bank-meta">
+                <div class="meta-row">
+                  <div class="meta-item">
+                    <span>所属课程</span>
+                    <strong>全部课程</strong>
+                  </div>
+                  <div class="meta-item">
+                    <span>题目数量</span>
+                    <strong>96 题</strong>
+                  </div>
+                </div>
+                <div class="meta-item wide">
+                  <span>题型构成</span>
+                  <strong>错因32 / 变式34 / 重练30</strong>
+                </div>
+              </div>
+            </div>
+          </article>
+        </section>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
