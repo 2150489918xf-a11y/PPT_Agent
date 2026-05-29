@@ -34,7 +34,8 @@
     }
 
     button,
-    textarea {
+    textarea,
+    a {
       font: inherit;
       color: inherit;
       background: transparent;
@@ -65,6 +66,11 @@
       height: 34px;
       min-width: 76px;
       background: var(--white);
+      border: 1px solid var(--heavy);
+      display: grid;
+      place-items: center;
+      text-decoration: none;
+      font-weight: 700;
     }
 
     .doc-title {
@@ -99,6 +105,11 @@
       min-width: 92px;
       padding: 0 12px;
       background: var(--white);
+      border: 1px solid var(--heavy);
+      display: grid;
+      place-items: center;
+      text-decoration: none;
+      font-weight: 700;
     }
 
     .workspace {
@@ -437,14 +448,14 @@
 <body>
   <div class="app">
     <header class="topbar">
-      <button class="back">返回</button>
+      <a class="back" href="workspace-wireframe.html">返回</a>
       <div class="doc-title">
         <strong>牛顿第二定律</strong>
         <span>PPT 课件 · 12 页</span>
       </div>
       <div class="top-actions">
-        <button class="top-btn">预览教案</button>
-        <button class="top-btn">导出</button>
+        <a class="top-btn" href="workspace-wireframe.html">预览教案</a>
+        <a class="top-btn" href="ppt-preview-wireframe.html">预览播放</a>
         <button class="top-btn">重新生成</button>
       </div>
     </header>

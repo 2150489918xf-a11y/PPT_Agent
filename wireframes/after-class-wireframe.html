@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>课后分析入口线框原型</title>
+  <title>课后数据分析入口线框原型</title>
   <style>
     :root {
       --ink: #111;
@@ -28,10 +28,15 @@
     }
 
     button,
-    input {
+    input,
+    a {
       font: inherit;
       color: inherit;
       background: transparent;
+    }
+
+    a {
+      text-decoration: none;
     }
 
     .app {
@@ -101,7 +106,7 @@
     .topbar {
       min-height: 116px;
       padding: 14px 18px 16px;
-      border-bottom: 2px solid #1686ff;
+      border-bottom: 1px solid var(--line);
       background: var(--white);
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
@@ -208,24 +213,25 @@
     .course-table {
       border: 1px solid var(--line);
       background: var(--white);
+      overflow: hidden;
     }
 
     .table-head,
     .course-row {
       display: grid;
-      grid-template-columns: minmax(260px, 1.3fr) 130px 130px 150px 270px;
-      align-items: center;
-      min-height: 68px;
+      grid-template-columns: minmax(300px, 1.4fr) 120px 130px 150px 150px;
+      align-items: stretch;
     }
 
     .table-head {
-      min-height: 46px;
+      min-height: 48px;
       border-bottom: 1px solid var(--line);
       background: #fafafa;
       font-weight: 800;
     }
 
     .course-row {
+      min-height: 78px;
       border-bottom: 1px solid var(--line);
     }
 
@@ -234,7 +240,6 @@
     }
 
     .cell {
-      height: 100%;
       min-width: 0;
       padding: 12px 14px;
       border-right: 1px solid var(--line);
@@ -259,24 +264,20 @@
       line-height: 1.5;
     }
 
-    .stage-actions {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 8px;
-    }
-
-    .stage-btn {
+    .detail-link {
       height: 34px;
       border: 1px solid var(--strong);
       background: var(--white);
       font-weight: 800;
       white-space: nowrap;
+      display: grid;
+      place-items: center;
     }
 
     @media (max-width: 1180px) {
       .table-head,
       .course-row {
-        grid-template-columns: minmax(220px, 1.2fr) 110px 110px 130px 250px;
+        grid-template-columns: minmax(240px, 1.2fr) 100px 110px 130px 150px;
       }
     }
 
@@ -314,13 +315,13 @@
     <aside class="sidebar">
       <div class="side-title">
         <h2>课后</h2>
-        <p>分析入口原型</p>
+        <p>数据分析入口</p>
       </div>
       <nav class="nav" aria-label="主导航">
         <a href="eduai-workbench-wireframe.html"><span class="icon"></span>首页</a>
         <a href="my-courses-wireframe.html"><span class="icon"></span>课前</a>
         <a href="in-class-ppt-wireframe.html"><span class="icon"></span>课中</a>
-        <a class="active" href="#"><span class="icon"></span>课后</a>
+        <a class="active" href="after-class-wireframe.html"><span class="icon"></span>课后</a>
         <a href="question-bank-wireframe.html"><span class="icon"></span>题库</a>
         <a href="#"><span class="icon"></span>知识库</a>
       </nav>
@@ -330,13 +331,13 @@
       <header class="topbar">
         <div>
           <p class="crumb">当前位置：首页 / 课后</p>
-          <h1 class="page-title">课后分析</h1>
-          <p class="page-desc">选择课程后进入课前、课中或课后的阶段分析页面，查看不同教学阶段的数据与建议。</p>
+          <h1 class="page-title">课后数据分析</h1>
+          <p class="page-desc">展示所有课程，点击每行后的查看数据进入课程数据详情页，在详情页内切换课前、课中、课后阶段。</p>
         </div>
         <div class="top-actions">
           <div class="search">
             <span class="search-mark"></span>
-            <span>搜索课程、班级、教师</span>
+            <span>搜索课程、班级、学科</span>
           </div>
         </div>
       </header>
@@ -362,108 +363,84 @@
             <div class="cell">学科</div>
             <div class="cell">班级</div>
             <div class="cell">上课时间</div>
-            <div class="cell">阶段分析</div>
+            <div class="cell">数据详情</div>
           </div>
 
           <article class="course-row">
             <div class="cell">
               <h2 class="course-name">牛顿第二定律</h2>
-              <span class="sub">高中物理 · 12 页 PPT · 86 道关联题</span>
+              <span class="sub">高中物理 · 12 页 PPT · 86 道关联题 · 已完成课堂</span>
             </div>
             <div class="cell"><strong>物理</strong></div>
             <div class="cell"><strong>高一 3 班</strong></div>
             <div class="cell"><strong>今天 09:20</strong></div>
             <div class="cell">
-              <div class="stage-actions">
-                <button class="stage-btn">课前</button>
-                <button class="stage-btn">课中</button>
-                <button class="stage-btn">课后</button>
-              </div>
+              <a class="detail-link" href="stage-analysis-wireframe.html">查看数据</a>
             </div>
           </article>
 
           <article class="course-row">
             <div class="cell">
               <h2 class="course-name">平面直角坐标系</h2>
-              <span class="sub">七年级数学 · 18 页 PPT · 72 道关联题</span>
+              <span class="sub">七年级数学 · 18 页 PPT · 72 道关联题 · 已完成课堂</span>
             </div>
             <div class="cell"><strong>数学</strong></div>
             <div class="cell"><strong>七年级 2 班</strong></div>
             <div class="cell"><strong>昨天 14:00</strong></div>
             <div class="cell">
-              <div class="stage-actions">
-                <button class="stage-btn">课前</button>
-                <button class="stage-btn">课中</button>
-                <button class="stage-btn">课后</button>
-              </div>
+              <a class="detail-link" href="stage-analysis-wireframe.html">查看数据</a>
             </div>
           </article>
 
           <article class="course-row">
             <div class="cell">
               <h2 class="course-name">质量守恒定律</h2>
-              <span class="sub">九年级化学 · 实验课 · 61 道关联题</span>
+              <span class="sub">九年级化学 · 实验课 · 61 道关联题 · 已完成课堂</span>
             </div>
             <div class="cell"><strong>化学</strong></div>
             <div class="cell"><strong>九年级 1 班</strong></div>
             <div class="cell"><strong>周三 10:10</strong></div>
             <div class="cell">
-              <div class="stage-actions">
-                <button class="stage-btn">课前</button>
-                <button class="stage-btn">课中</button>
-                <button class="stage-btn">课后</button>
-              </div>
+              <a class="detail-link" href="stage-analysis-wireframe.html">查看数据</a>
             </div>
           </article>
 
           <article class="course-row">
             <div class="cell">
               <h2 class="course-name">惯性与运动状态</h2>
-              <span class="sub">八年级物理 · 探究课 · 54 道关联题</span>
+              <span class="sub">八年级物理 · 探究课 · 54 道关联题 · 已完成课堂</span>
             </div>
             <div class="cell"><strong>物理</strong></div>
             <div class="cell"><strong>八年级 4 班</strong></div>
             <div class="cell"><strong>周二 15:30</strong></div>
             <div class="cell">
-              <div class="stage-actions">
-                <button class="stage-btn">课前</button>
-                <button class="stage-btn">课中</button>
-                <button class="stage-btn">课后</button>
-              </div>
+              <a class="detail-link" href="stage-analysis-wireframe.html">查看数据</a>
             </div>
           </article>
 
           <article class="course-row">
             <div class="cell">
               <h2 class="course-name">一次函数图像</h2>
-              <span class="sub">八年级数学 · 概念建构 · 48 道关联题</span>
+              <span class="sub">八年级数学 · 概念建构 · 48 道关联题 · 已完成课堂</span>
             </div>
             <div class="cell"><strong>数学</strong></div>
             <div class="cell"><strong>八年级 1 班</strong></div>
             <div class="cell"><strong>本周一</strong></div>
             <div class="cell">
-              <div class="stage-actions">
-                <button class="stage-btn">课前</button>
-                <button class="stage-btn">课中</button>
-                <button class="stage-btn">课后</button>
-              </div>
+              <a class="detail-link" href="stage-analysis-wireframe.html">查看数据</a>
             </div>
           </article>
 
           <article class="course-row">
             <div class="cell">
               <h2 class="course-name">浮力与密度</h2>
-              <span class="sub">八年级物理 · 复习课 · 66 道关联题</span>
+              <span class="sub">八年级物理 · 复习课 · 66 道关联题 · 已完成课堂</span>
             </div>
             <div class="cell"><strong>物理</strong></div>
             <div class="cell"><strong>八年级 5 班</strong></div>
             <div class="cell"><strong>上周五</strong></div>
             <div class="cell">
-              <div class="stage-actions">
-                <button class="stage-btn">课前</button>
-                <button class="stage-btn">课中</button>
-                <button class="stage-btn">课后</button>
-              </div>
+              <a class="detail-link" href="stage-analysis-wireframe.html">查看数据</a>
             </div>
           </article>
         </section>

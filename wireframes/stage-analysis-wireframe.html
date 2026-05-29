@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>阶段数据分析线框原型</title>
+  <style>
+    :root {
+      --ink: #111;
+      --muted: #555;
+      --line: #c7c7c7;
+      --strong: #222;
+      --bg: #efefef;
+      --white: #fff;
+      --panel: #f7f7f7;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background: var(--bg);
+      font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+    }
+
+    button,
+    a {
+      font: inherit;
+      color: inherit;
+      background: transparent;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    button,
+    a.button {
+      border: 1px solid var(--strong);
+      font-weight: 700;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 160px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      border-right: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .side-title {
+      height: 116px;
+      padding: 16px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .side-title h2 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .side-title p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .nav {
+      display: grid;
+    }
+
+    .nav a {
+      height: 54px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 14px;
+      border-bottom: 1px solid var(--line);
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    .nav a.active {
+      background: var(--strong);
+      color: #fff;
+    }
+
+    .icon {
+      width: 16px;
+      height: 16px;
+      border: 2px solid currentColor;
+      flex: 0 0 auto;
+    }
+
+    .main {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      min-height: 116px;
+      padding: 14px 18px 16px;
+      border-bottom: 1px solid var(--line);
+      background: var(--white);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .crumb {
+      margin: 0 0 6px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .page-title {
+      margin: 0;
+      font-size: 36px;
+      line-height: 1.05;
+    }
+
+    .page-desc {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      height: 38px;
+      min-width: 112px;
+      display: grid;
+      place-items: center;
+      background: var(--white);
+    }
+
+    .content {
+      padding: 20px;
+      display: grid;
+      gap: 20px;
+    }
+
+    .stage-tabs {
+      border: 1px solid var(--line);
+      background: var(--white);
+      padding: 14px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .stage-tab {
+      min-height: 62px;
+      border: 1px solid var(--line);
+      background: #fafafa;
+      padding: 10px 12px;
+      display: grid;
+      gap: 6px;
+      align-content: center;
+      text-align: left;
+    }
+
+    .stage-tab.active {
+      border: 2px solid var(--strong);
+      background: var(--white);
+    }
+
+    .stage-tab strong {
+      font-size: 18px;
+    }
+
+    .stage-tab span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .metric-card {
+      min-height: 96px;
+      border: 1px solid var(--line);
+      background: var(--white);
+      padding: 14px;
+      display: grid;
+      align-content: center;
+      gap: 8px;
+    }
+
+    .metric-card strong {
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .metric-card span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .analysis-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      background: var(--white);
+      padding: 16px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .panel h2 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.2;
+    }
+
+    .radar-box {
+      min-height: 320px;
+      display: grid;
+      grid-template-columns: minmax(260px, 1fr) minmax(220px, 0.8fr);
+      gap: 18px;
+      align-items: center;
+    }
+
+    .radar {
+      width: min(100%, 330px);
+      aspect-ratio: 1;
+      border: 1px solid var(--line);
+      justify-self: center;
+      position: relative;
+      display: grid;
+      place-items: center;
+    }
+
+    .radar::before,
+    .radar::after {
+      content: "";
+      position: absolute;
+      border: 1px solid var(--line);
+      inset: 14%;
+    }
+
+    .radar::after {
+      inset: 28%;
+    }
+
+    .radar-shape {
+      width: 54%;
+      height: 58%;
+      border: 3px solid var(--strong);
+      clip-path: polygon(50% 0, 82% 22%, 92% 56%, 65% 90%, 28% 82%, 8% 48%, 22% 18%);
+    }
+
+    .radar-labels {
+      display: grid;
+      gap: 10px;
+    }
+
+    .label-row {
+      min-height: 42px;
+      border: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 70px;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      font-size: 14px;
+    }
+
+    .label-row strong {
+      font-size: 16px;
+    }
+
+    .bar-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .two-column {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .score-panel {
+      min-height: 324px;
+      align-content: stretch;
+    }
+
+    .column-chart {
+      min-height: 244px;
+      border: 1px solid var(--line);
+      padding: 14px 16px 12px;
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr);
+      grid-template-rows: minmax(170px, 1fr) 28px;
+      column-gap: 10px;
+      row-gap: 8px;
+    }
+
+    .y-axis {
+      display: grid;
+      grid-template-rows: repeat(5, 1fr);
+      align-items: start;
+      justify-items: end;
+      color: var(--muted);
+      font-size: 12px;
+      padding-top: 2px;
+    }
+
+    .plot-area {
+      border-left: 2px solid var(--strong);
+      border-bottom: 2px solid var(--strong);
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+      align-items: end;
+      min-height: 190px;
+      padding: 8px 14px 0;
+    }
+
+    .grid-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .grid-line.g100 { top: 0; }
+    .grid-line.g75 { top: 25%; }
+    .grid-line.g50 { top: 50%; }
+    .grid-line.g25 { top: 75%; }
+    }
+
+    .chart-item {
+      min-width: 0;
+      height: 100%;
+      display: grid;
+      grid-template-rows: 22px minmax(0, 1fr);
+      gap: 6px;
+      text-align: center;
+      align-self: stretch;
+      align-items: stretch;
+      position: relative;
+      z-index: 1;
+    }
+
+    .chart-value {
+      font-weight: 800;
+      font-size: 16px;
+      align-self: end;
+    }
+
+    .chart-bar {
+      width: min(54px, 100%);
+      height: 100%;
+      border: 1px solid var(--line);
+      justify-self: center;
+      align-self: stretch;
+      position: relative;
+      background: #fafafa;
+      min-height: 130px;
+    }
+
+    .chart-fill {
+      display: block;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--strong);
+    }
+
+    .chart-label {
+      font-size: 14px;
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    .x-axis {
+      grid-column: 2;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+      padding: 0 14px;
+    }
+
+    .weak-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .weak-item {
+      border: 1px solid var(--line);
+      padding: 12px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .weak-item strong {
+      font-size: 17px;
+    }
+
+    .weak-item p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .ai-note {
+      border: 1px solid var(--strong);
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .ai-note h3 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .ai-note p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .diagnosis-list {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+
+    .question-table {
+      border: 1px solid var(--line);
+      background: var(--white);
+    }
+
+    .question-head,
+    .question-row {
+      display: grid;
+      grid-template-columns: 70px minmax(260px, 1fr) 100px 100px 110px 100px 110px 140px 126px;
+      align-items: stretch;
+    }
+
+    .question-head {
+      min-height: 44px;
+      border-bottom: 1px solid var(--line);
+      background: #fafafa;
+      font-weight: 800;
+    }
+
+    .question-row {
+      min-height: 58px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .question-row:last-child {
+      border-bottom: 0;
+    }
+
+    .cell {
+      padding: 10px 12px;
+      border-right: 1px solid var(--line);
+      display: grid;
+      align-content: center;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .cell:last-child {
+      border-right: 0;
+    }
+
+    .cell span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .question-table .button {
+      width: 86px;
+      min-width: 0;
+      height: 32px;
+      justify-self: center;
+    }
+
+    @media (max-width: 1180px) {
+      .metric-grid,
+      .stage-tabs {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .analysis-grid,
+      .two-column,
+      .radar-box {
+        grid-template-columns: 1fr;
+      }
+
+      .question-table {
+        overflow-x: auto;
+      }
+
+      .question-head,
+      .question-row {
+        min-width: 1180px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="side-title">
+        <h2>课后</h2>
+        <p>阶段数据分析</p>
+      </div>
+      <nav class="nav" aria-label="主导航">
+        <a href="eduai-workbench-wireframe.html"><span class="icon"></span>首页</a>
+        <a href="my-courses-wireframe.html"><span class="icon"></span>课前</a>
+        <a href="in-class-ppt-wireframe.html"><span class="icon"></span>课中</a>
+        <a class="active" href="after-class-wireframe.html"><span class="icon"></span>课后</a>
+        <a href="question-bank-wireframe.html"><span class="icon"></span>题库</a>
+        <a href="#"><span class="icon"></span>知识库</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="crumb">当前位置：首页 / 课后 / 牛顿第二定律 / 数据分析</p>
+          <h1 class="page-title">牛顿第二定律 · 数据分析</h1>
+          <p class="page-desc">基于课前预习、课中小测和课后作业的作答数据，展示正确率、完成率、薄弱知识点和教学建议。</p>
+        </div>
+        <div class="top-actions">
+          <a class="button" href="after-class-wireframe.html">返回课程列表</a>
+          <button class="button">导出报告</button>
+        </div>
+      </header>
+
+      <section class="content">
+        <section class="stage-tabs" aria-label="阶段切换">
+          <button class="stage-tab">
+            <strong>课前预习</strong>
+            <span>预习练习 · 12题 · 提交率 86%</span>
+          </button>
+          <button class="stage-tab active">
+            <strong>课中小测</strong>
+            <span>课堂小测 · 8题 · 平均正确率 68%</span>
+          </button>
+          <button class="stage-tab">
+            <strong>课后作业</strong>
+            <span>课后作业 · 16题 · 完成率 91%</span>
+          </button>
+        </section>
+
+        <section class="metric-grid" aria-label="核心指标">
+          <div class="metric-card">
+            <strong>42 / 45</strong>
+            <span>提交人数</span>
+          </div>
+          <div class="metric-card">
+            <strong>68%</strong>
+            <span>平均正确率</span>
+          </div>
+          <div class="metric-card">
+            <strong>8 分钟</strong>
+            <span>平均用时</span>
+          </div>
+          <div class="metric-card">
+            <strong>3 个</strong>
+            <span>薄弱知识点</span>
+          </div>
+        </section>
+
+        <section class="analysis-grid">
+          <article class="panel">
+            <h2>能力维度表现</h2>
+            <div class="radar-box">
+              <div class="radar" aria-label="雷达图占位">
+                <div class="radar-shape"></div>
+              </div>
+              <div class="radar-labels">
+                <div class="label-row"><span>概念理解</span><strong>78%</strong></div>
+                <div class="label-row"><span>公式应用</span><strong>65%</strong></div>
+                <div class="label-row"><span>实验分析</span><strong>52%</strong></div>
+                <div class="label-row"><span>图像判断</span><strong>61%</strong></div>
+                <div class="label-row"><span>生活迁移</span><strong>56%</strong></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <h2>阶段诊断摘要</h2>
+            <div class="diagnosis-list">
+              <div class="ai-note">
+                <h3>本阶段建议</h3>
+                <p>课中小测显示，学生对概念识别和基础选择题掌握较好，但实验分析和生活迁移仍偏弱。建议当堂补讲实验变量控制，并在课后作业中追加 3 道变式题。</p>
+              </div>
+              <div class="ai-note">
+                <h3>下一步动作</h3>
+                <p>1. 针对第 3 题进行错因讲评。<br />2. 给正确率低于 60% 的学生下发基础巩固题。<br />3. 下节课前复测 F=ma 的变量关系。</p>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section class="two-column">
+          <article class="panel score-panel">
+            <h2>题型正确率</h2>
+            <div class="column-chart" aria-label="题型正确率柱状图">
+              <div class="y-axis" aria-label="正确率刻度">
+                <span>100%</span>
+                <span>75%</span>
+                <span>50%</span>
+                <span>25%</span>
+                <span>0%</span>
+              </div>
+              <div class="plot-area">
+                <span class="grid-line g100"></span>
+                <span class="grid-line g75"></span>
+                <span class="grid-line g50"></span>
+                <span class="grid-line g25"></span>
+                <div class="chart-item">
+                  <strong class="chart-value">82%</strong>
+                  <div class="chart-bar"><span class="chart-fill" style="height: 82%;"></span></div>
+                </div>
+                <div class="chart-item">
+                  <strong class="chart-value">74%</strong>
+                  <div class="chart-bar"><span class="chart-fill" style="height: 74%;"></span></div>
+                </div>
+                <div class="chart-item">
+                  <strong class="chart-value">58%</strong>
+                  <div class="chart-bar"><span class="chart-fill" style="height: 58%;"></span></div>
+                </div>
+                <div class="chart-item">
+                  <strong class="chart-value">56%</strong>
+                  <div class="chart-bar"><span class="chart-fill" style="height: 56%;"></span></div>
+                </div>
+              </div>
+              <div class="x-axis" aria-label="题型">
+                <span class="chart-label">选择题</span>
+                <span class="chart-label">判断题</span>
+                <span class="chart-label">分析题</span>
+                <span class="chart-label">应用题</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <h2>薄弱知识点</h2>
+            <div class="weak-list">
+              <div class="weak-item">
+                <strong>实验变量控制 · 正确率 48%</strong>
+                <p>学生在根据实验数据判断合力与加速度关系时错误较多，建议追加实验数据题。</p>
+              </div>
+              <div class="weak-item">
+                <strong>质量与加速度关系 · 正确率 61%</strong>
+                <p>部分学生没有理解质量增大时加速度减小的反比关系。</p>
+              </div>
+              <div class="weak-item">
+                <strong>生活情境迁移 · 正确率 56%</strong>
+                <p>学生能够套用公式，但在电梯、推车等情境中解释不充分。</p>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section class="panel">
+          <h2>题目数据明细</h2>
+          <div class="question-table">
+            <div class="question-head">
+              <div class="cell">题号</div>
+              <div class="cell">题目摘要</div>
+              <div class="cell">所属阶段</div>
+              <div class="cell">题型</div>
+              <div class="cell">提交人数</div>
+              <div class="cell">正确率</div>
+              <div class="cell">平均用时</div>
+              <div class="cell">常见错误</div>
+              <div class="cell">操作</div>
+            </div>
+            <div class="question-row">
+              <div class="cell"><strong>1</strong></div>
+              <div class="cell"><strong>恒定合力下加速度如何变化</strong><span>考查力与加速度关系</span></div>
+              <div class="cell">课中小测</div>
+              <div class="cell">选择题</div>
+              <div class="cell"><strong>42 / 45</strong></div>
+              <div class="cell"><strong>82%</strong></div>
+              <div class="cell">1分20秒</div>
+              <div class="cell">概念混淆</div>
+              <div class="cell"><a class="button" href="question-analysis-wireframe.html">查看</a></div>
+            </div>
+            <div class="question-row">
+              <div class="cell"><strong>2</strong></div>
+              <div class="cell"><strong>质量加倍时加速度变化</strong><span>考查质量与加速度反比</span></div>
+              <div class="cell">课中小测</div>
+              <div class="cell">判断题</div>
+              <div class="cell"><strong>41 / 45</strong></div>
+              <div class="cell"><strong>61%</strong></div>
+              <div class="cell">1分50秒</div>
+              <div class="cell">反比关系错误</div>
+              <div class="cell"><a class="button" href="question-analysis-wireframe.html">查看</a></div>
+            </div>
+            <div class="question-row">
+              <div class="cell"><strong>3</strong></div>
+              <div class="cell"><strong>根据实验数据判断关系</strong><span>考查实验数据分析</span></div>
+              <div class="cell">课中小测</div>
+              <div class="cell">分析题</div>
+              <div class="cell"><strong>39 / 45</strong></div>
+              <div class="cell"><strong>48%</strong></div>
+              <div class="cell">3分10秒</div>
+              <div class="cell">不会读表</div>
+              <div class="cell"><a class="button" href="question-analysis-wireframe.html">查看</a></div>
+            </div>
+            <div class="question-row">
+              <div class="cell"><strong>4</strong></div>
+              <div class="cell"><strong>电梯启动时体重计示数变化</strong><span>考查生活情境迁移</span></div>
+              <div class="cell">课中小测</div>
+              <div class="cell">应用题</div>
+              <div class="cell"><strong>42 / 45</strong></div>
+              <div class="cell"><strong>56%</strong></div>
+              <div class="cell">2分40秒</div>
+              <div class="cell">受力分析弱</div>
+              <div class="cell"><a class="button" href="question-analysis-wireframe.html">查看</a></div>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

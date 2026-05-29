@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>题目详情页线框原型</title>
+  <style>
+    :root {
+      --ink: #111;
+      --muted: #555;
+      --line: #c7c7c7;
+      --strong: #222;
+      --bg: #efefef;
+      --white: #fff;
+      --panel: #f7f7f7;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--bg);
+      font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+      overflow: hidden;
+    }
+    button, textarea, select { font: inherit; color: inherit; background: transparent; }
+    button, a, select { border: 1px solid var(--strong); font-weight: 700; }
+    a { color: inherit; text-decoration: none; }
+
+    .app {
+      height: 100vh;
+      display: grid;
+      grid-template-rows: 74px minmax(0, 1fr);
+    }
+    .topbar {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--strong);
+      background: var(--white);
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 16px;
+    }
+    .back {
+      height: 38px;
+      min-width: 118px;
+      background: var(--white);
+      display: grid;
+      place-items: center;
+    }
+    .title-block { display: grid; gap: 6px; min-width: 0; }
+    .crumb { margin: 0; color: var(--muted); font-size: 13px; }
+    h1 { margin: 0; font-size: 28px; line-height: 1.05; }
+    .top-actions { display: flex; gap: 10px; align-items: center; }
+    .top-btn { height: 36px; min-width: 96px; background: var(--white); }
+
+    .layout {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(620px, 1fr) 360px;
+      overflow: hidden;
+    }
+    .main {
+      min-width: 0;
+      min-height: 0;
+      padding: 20px;
+      overflow: auto;
+      display: grid;
+      gap: 18px;
+      align-content: start;
+    }
+    .section {
+      border: 1px solid var(--line);
+      background: var(--white);
+      padding: 16px;
+      display: grid;
+      gap: 14px;
+    }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: start;
+    }
+    .section h2 { margin: 0; font-size: 22px; line-height: 1.2; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; color: var(--muted); font-size: 13px; }
+    .tag { border: 1px solid var(--line); padding: 4px 8px; background: #fafafa; }
+    .stage-tag { border-color: var(--strong); color: var(--ink); font-weight: 800; }
+    .question-text {
+      min-height: 132px;
+      border: 1px solid var(--line);
+      padding: 14px;
+      line-height: 1.7;
+      font-size: 17px;
+    }
+    .options {
+      display: grid;
+      gap: 10px;
+    }
+    .option {
+      border: 1px solid var(--line);
+      min-height: 42px;
+      padding: 10px 12px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .answer-grid {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+      gap: 14px;
+    }
+    .answer-box {
+      border: 1px solid var(--line);
+      padding: 12px;
+      min-height: 90px;
+      display: grid;
+      gap: 8px;
+      align-content: start;
+    }
+    .answer-box strong { font-size: 17px; }
+    .answer-box p { margin: 0; color: var(--muted); line-height: 1.6; }
+    .edit-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .edit-btn { height: 36px; min-width: 112px; background: var(--white); }
+
+    .ai {
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      border-left: 1px solid var(--line);
+      background: var(--panel);
+      overflow: hidden;
+    }
+    .ai-head {
+      padding: 16px;
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      gap: 8px;
+    }
+    .ai-title { display: flex; align-items: center; gap: 10px; }
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border: 2px solid var(--strong);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--white);
+      font-size: 13px;
+      font-weight: 800;
+      flex: 0 0 auto;
+    }
+    .ai-head h2 { margin: 0; font-size: 22px; line-height: 1.1; }
+    .ai-head p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .chat {
+      min-height: 0;
+      overflow: auto;
+      padding: 14px 16px;
+      display: grid;
+      align-content: start;
+      gap: 12px;
+    }
+    .message {
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+    }
+    .message.user { grid-template-columns: minmax(0, 1fr) 34px; }
+    .bubble {
+      border: 1px solid var(--line);
+      background: var(--white);
+      padding: 12px;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+    .bubble.user { border-color: var(--strong); }
+    .bubble strong { display: block; margin-bottom: 6px; font-size: 14px; }
+    .input-area {
+      padding: 14px 16px;
+      border-top: 1px solid var(--line);
+      display: grid;
+      gap: 10px;
+    }
+    .prompt {
+      width: 100%;
+      height: 90px;
+      resize: none;
+      border: 1px solid var(--line);
+      padding: 12px;
+      background: var(--white);
+      color: var(--muted);
+    }
+    .send-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+    .chat-btn { height: 36px; background: var(--white); }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <a class="back" href="question-bank-detail-wireframe.html">返回题库</a>
+      <div class="title-block">
+        <p class="crumb">当前位置：首页 / 题库 / 牛顿第二定律题库 / 题目详情</p>
+        <h1>题目详情</h1>
+      </div>
+      <div class="top-actions">
+        <button class="top-btn">保存修改</button>
+        <button class="top-btn">加入课堂</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="main">
+        <article class="section">
+          <div class="section-head">
+            <div>
+              <h2>1. 物体受到恒定合力时，加速度会怎样变化？</h2>
+              <div class="tags">
+                <span class="tag stage-tag">待分类</span>
+                <span class="tag">选择题</span>
+                <span class="tag">简单</span>
+                <span class="tag">牛顿第二定律</span>
+              </div>
+            </div>
+            <select class="top-btn">
+              <option>分类：待分类</option>
+              <option>分类：课前习题</option>
+              <option>分类：课中习题</option>
+              <option>分类：课后习题</option>
+            </select>
+          </div>
+          <div class="question-text">
+            一个质量为 2kg 的小车受到恒定水平合力作用时，它的运动状态发生变化。若合力增大，小车的加速度会怎样变化？
+          </div>
+          <div class="options">
+            <div class="option">A. 加速度增大</div>
+            <div class="option">B. 加速度减小</div>
+            <div class="option">C. 加速度不变</div>
+            <div class="option">D. 加速度方向一定改变</div>
+          </div>
+        </article>
+
+        <section class="section">
+          <h2>答案与题解</h2>
+          <div class="answer-grid">
+            <div class="answer-box">
+              <strong>正确答案</strong>
+              <p>A. 加速度增大</p>
+            </div>
+            <div class="answer-box">
+              <strong>解析</strong>
+              <p>根据牛顿第二定律 F=ma，在质量不变时，加速度与合力成正比。合力增大，加速度也随之增大，方向与合力方向一致。</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>题目操作</h2>
+          <div class="edit-row">
+            <button class="edit-btn">生成变式题</button>
+            <button class="edit-btn">调整难度</button>
+            <button class="edit-btn">补充解析</button>
+            <button class="edit-btn">改成课中互动题</button>
+          </div>
+        </section>
+      </section>
+
+      <aside class="ai">
+        <header class="ai-head">
+          <div class="ai-title">
+            <span class="avatar">AI</span>
+            <h2>AI 修改题目</h2>
+          </div>
+          <p>围绕当前题目进行改写、补充解析、生成变式或调整难度。</p>
+        </header>
+        <section class="chat">
+          <div class="message">
+            <span class="avatar">AI</span>
+            <div class="bubble">
+              <strong>当前题目</strong>
+              这道题适合作为课前检测，难度较基础。
+            </div>
+          </div>
+          <div class="message user">
+            <div class="bubble user">
+              <strong>老师</strong>
+              把这道题改成更适合课中互动的形式。
+            </div>
+            <span class="avatar">我</span>
+          </div>
+        </section>
+        <footer class="input-area">
+          <textarea class="prompt">输入对当前题目的修改要求...</textarea>
+          <div class="send-row">
+            <button class="chat-btn">语音</button>
+            <button class="chat-btn">清空</button>
+            <button class="chat-btn">发送</button>
+          </div>
+        </footer>
+      </aside>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>单题数据分析线框原型</title>
+  <style>
+    :root {
+      --ink: #111;
+      --muted: #555;
+      --line: #c7c7c7;
+      --strong: #222;
+      --bg: #efefef;
+      --white: #fff;
+      --panel: #f7f7f7;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background: var(--bg);
+      font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+    }
+
+    button,
+    a {
+      font: inherit;
+      color: inherit;
+      background: transparent;
+    }
+
+    a { text-decoration: none; }
+
+    button,
+    a.button {
+      border: 1px solid var(--strong);
+      font-weight: 700;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 160px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      border-right: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .side-title {
+      height: 116px;
+      padding: 16px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .side-title h2 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .side-title p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .nav { display: grid; }
+
+    .nav a {
+      height: 54px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 14px;
+      border-bottom: 1px solid var(--line);
+      font-size: 16px;
+    }
+
+    .nav a.active {
+      background: var(--strong);
+      color: #fff;
+    }
+
+    .icon {
+      width: 16px;
+      height: 16px;
+      border: 2px solid currentColor;
+      flex: 0 0 auto;
+    }
+
+    .main {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      min-height: 116px;
+      padding: 14px 18px 16px;
+      border-bottom: 1px solid var(--line);
+      background: var(--white);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .crumb {
+      margin: 0 0 6px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .page-title {
+      margin: 0;
+      font-size: 36px;
+      line-height: 1.05;
+    }
+
+    .page-desc {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      height: 38px;
+      min-width: 112px;
+      display: grid;
+      place-items: center;
+      background: var(--white);
+    }
+
+    .content {
+      padding: 20px;
+      display: grid;
+      gap: 20px;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(360px, 0.9fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      background: var(--white);
+      padding: 16px;
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .panel h2 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.2;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .tag {
+      border: 1px solid var(--line);
+      padding: 4px 8px;
+      background: #fafafa;
+    }
+
+    .question-text {
+      border: 1px solid var(--line);
+      padding: 14px;
+      min-height: 116px;
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    .option-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .option {
+      min-height: 38px;
+      border: 1px solid var(--line);
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .answer-grid {
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr);
+      gap: 12px;
+    }
+
+    .info-box {
+      border: 1px solid var(--line);
+      padding: 12px;
+      display: grid;
+      gap: 8px;
+      align-content: start;
+    }
+
+    .info-box p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 13px;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .metric-card {
+      min-height: 90px;
+      border: 1px solid var(--line);
+      padding: 12px;
+      display: grid;
+      align-content: center;
+      gap: 8px;
+    }
+
+    .metric-card strong {
+      font-size: 26px;
+      line-height: 1;
+    }
+
+    .metric-card span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .middle-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .choice-chart {
+      border: 1px solid var(--line);
+      min-height: 250px;
+      padding: 14px 16px 12px;
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr);
+      grid-template-rows: minmax(172px, 1fr) 28px;
+      column-gap: 10px;
+      row-gap: 8px;
+    }
+
+    .y-axis {
+      display: grid;
+      grid-template-rows: repeat(5, 1fr);
+      align-items: start;
+      justify-items: end;
+      color: var(--muted);
+      font-size: 12px;
+      padding-top: 2px;
+    }
+
+    .plot-area {
+      border-left: 2px solid var(--strong);
+      border-bottom: 2px solid var(--strong);
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+      align-items: end;
+      padding: 8px 14px 0;
+      min-height: 190px;
+    }
+
+    .grid-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .grid-line.g40 { top: 20%; }
+    .grid-line.g30 { top: 40%; }
+    .grid-line.g20 { top: 60%; }
+    .grid-line.g10 { top: 80%; }
+
+    .chart-item {
+      height: 100%;
+      display: grid;
+      grid-template-rows: 22px minmax(0, 1fr);
+      gap: 6px;
+      text-align: center;
+      align-items: stretch;
+      position: relative;
+      z-index: 1;
+    }
+
+    .chart-value {
+      font-weight: 800;
+      font-size: 15px;
+      align-self: end;
+    }
+
+    .chart-bar {
+      width: min(54px, 100%);
+      height: 100%;
+      min-height: 130px;
+      border: 1px solid var(--line);
+      justify-self: center;
+      align-self: stretch;
+      position: relative;
+      background: #fafafa;
+    }
+
+    .chart-fill {
+      display: block;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--strong);
+    }
+
+    .x-axis {
+      grid-column: 2;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+      padding: 0 14px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .reason-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .reason-item {
+      border: 1px solid var(--line);
+      padding: 12px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 72px;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .reason-item p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .student-table {
+      border: 1px solid var(--line);
+      overflow-x: auto;
+    }
+
+    .student-head,
+    .student-row {
+      display: grid;
+      grid-template-columns: 90px 100px 90px 100px 130px minmax(220px, 1fr) 126px;
+      min-width: 980px;
+      align-items: stretch;
+    }
+
+    .student-head {
+      min-height: 44px;
+      border-bottom: 1px solid var(--line);
+      background: #fafafa;
+      font-weight: 800;
+    }
+
+    .student-row {
+      min-height: 58px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .student-row:last-child { border-bottom: 0; }
+
+    .cell {
+      padding: 10px 12px;
+      border-right: 1px solid var(--line);
+      display: grid;
+      align-content: center;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .cell:last-child { border-right: 0; }
+    .cell span { color: var(--muted); font-size: 13px; }
+
+    .student-table .button {
+      width: 86px;
+      min-width: 0;
+      height: 32px;
+      justify-self: center;
+    }
+
+    @media (max-width: 1180px) {
+      .summary-grid,
+      .middle-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 920px) {
+      .app {
+        grid-template-columns: 132px minmax(0, 1fr);
+      }
+
+      .topbar {
+        grid-template-columns: 1fr;
+      }
+
+      .top-actions {
+        justify-content: flex-start;
+      }
+
+      .metric-grid,
+      .answer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="side-title">
+        <h2>课后</h2>
+        <p>单题数据分析</p>
+      </div>
+      <nav class="nav" aria-label="主导航">
+        <a href="eduai-workbench-wireframe.html"><span class="icon"></span>首页</a>
+        <a href="my-courses-wireframe.html"><span class="icon"></span>课前</a>
+        <a href="in-class-ppt-wireframe.html"><span class="icon"></span>课中</a>
+        <a class="active" href="after-class-wireframe.html"><span class="icon"></span>课后</a>
+        <a href="question-bank-wireframe.html"><span class="icon"></span>题库</a>
+        <a href="#"><span class="icon"></span>知识库</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="crumb">当前位置：首页 / 课后 / 牛顿第二定律 / 数据分析 / 第 3 题</p>
+          <h1 class="page-title">第 3 题 · 单题数据分析</h1>
+          <p class="page-desc">查看本题题干、正确率、选项分布、错因归类以及每位学生的作答情况。</p>
+        </div>
+        <div class="top-actions">
+          <a class="button" href="stage-analysis-wireframe.html">返回数据分析</a>
+          <button class="button">导出本题数据</button>
+        </div>
+      </header>
+
+      <section class="content">
+        <section class="summary-grid">
+          <article class="panel">
+            <h2>题目内容</h2>
+            <div class="tag-row">
+              <span class="tag">课中小测</span>
+              <span class="tag">分析题</span>
+              <span class="tag">实验变量控制</span>
+              <span class="tag">正确率 48%</span>
+            </div>
+            <div class="question-text">
+              某实验小组保持小车质量不变，改变拉力大小并记录小车加速度。根据表格数据，判断拉力与加速度之间的关系，并说明判断依据。
+            </div>
+            <div class="option-list" aria-label="题目材料">
+              <div class="option"><strong>材料 A</strong><span>拉力 1N，加速度 0.5m/s²</span></div>
+              <div class="option"><strong>材料 B</strong><span>拉力 2N，加速度 1.0m/s²</span></div>
+              <div class="option"><strong>材料 C</strong><span>拉力 3N，加速度 1.5m/s²</span></div>
+            </div>
+            <div class="answer-grid">
+              <div class="info-box">
+                <strong>标准答案</strong>
+                <p>拉力与加速度成正比。</p>
+              </div>
+              <div class="info-box">
+                <strong>题解要点</strong>
+                <p>质量不变时，拉力增大为原来的 2 倍、3 倍，加速度也对应增大为原来的 2 倍、3 倍，因此二者成正比。</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <h2>本题数据概览</h2>
+            <div class="metric-grid">
+              <div class="metric-card">
+                <strong>39 / 45</strong>
+                <span>提交人数</span>
+              </div>
+              <div class="metric-card">
+                <strong>48%</strong>
+                <span>正确率</span>
+              </div>
+              <div class="metric-card">
+                <strong>3分10秒</strong>
+                <span>平均用时</span>
+              </div>
+              <div class="metric-card">
+                <strong>21 人</strong>
+                <span>答错人数</span>
+              </div>
+            </div>
+            <div class="info-box">
+              <strong>教师关注点</strong>
+              <p>本题正确率低于阶段平均值，且学生错误集中在“只看数据大小，没有说明变量控制条件”。建议作为课堂讲评重点。</p>
+            </div>
+          </article>
+        </section>
+
+        <section class="middle-grid">
+          <article class="panel">
+            <h2>作答分布</h2>
+            <div class="choice-chart" aria-label="学生作答分布柱状图">
+              <div class="y-axis">
+                <span>20人</span>
+                <span>15人</span>
+                <span>10人</span>
+                <span>5人</span>
+                <span>0人</span>
+              </div>
+              <div class="plot-area">
+                <span class="grid-line g40"></span>
+                <span class="grid-line g30"></span>
+                <span class="grid-line g20"></span>
+                <span class="grid-line g10"></span>
+                <div class="chart-item">
+                  <strong class="chart-value">8人</strong>
+                  <div class="chart-bar"><span class="chart-fill" style="height: 40%;"></span></div>
+                </div>
+                <div class="chart-item">
+                  <strong class="chart-value">10人</strong>
+                  <div class="chart-bar"><span class="chart-fill" style="height: 50%;"></span></div>
+                </div>
+                <div class="chart-item">
+                  <strong class="chart-value">18人</strong>
+                  <div class="chart-bar"><span class="chart-fill" style="height: 90%;"></span></div>
+                </div>
+                <div class="chart-item">
+                  <strong class="chart-value">3人</strong>
+                  <div class="chart-bar"><span class="chart-fill" style="height: 15%;"></span></div>
+                </div>
+              </div>
+              <div class="x-axis">
+                <span>A</span>
+                <span>B</span>
+                <span>C 正确</span>
+                <span>D</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <h2>错因分析</h2>
+            <div class="reason-list">
+              <div class="reason-item">
+                <div>
+                  <strong>不会说明变量控制</strong>
+                  <p>学生能看出数值变化，但没有指出质量保持不变这一前提。</p>
+                </div>
+                <strong>12人</strong>
+              </div>
+              <div class="reason-item">
+                <div>
+                  <strong>比例关系判断错误</strong>
+                  <p>把“随拉力增大而增大”写成“成反比”或“无规律”。</p>
+                </div>
+                <strong>6人</strong>
+              </div>
+              <div class="reason-item">
+                <div>
+                  <strong>表格读取不完整</strong>
+                  <p>只比较了前两组数据，没有利用三组数据形成完整判断。</p>
+                </div>
+                <strong>3人</strong>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section class="panel">
+          <h2>学生作答明细</h2>
+          <div class="student-table">
+            <div class="student-head">
+              <div class="cell">学生</div>
+              <div class="cell">作答</div>
+              <div class="cell">结果</div>
+              <div class="cell">用时</div>
+              <div class="cell">提交时间</div>
+              <div class="cell">备注</div>
+              <div class="cell">操作</div>
+            </div>
+            <div class="student-row">
+              <div class="cell"><strong>张明</strong></div>
+              <div class="cell">C</div>
+              <div class="cell"><strong>正确</strong></div>
+              <div class="cell">2分40秒</div>
+              <div class="cell">10:21</div>
+              <div class="cell">说明了质量不变和比例关系</div>
+              <div class="cell"><button class="button">查看</button></div>
+            </div>
+            <div class="student-row">
+              <div class="cell"><strong>李华</strong></div>
+              <div class="cell">B</div>
+              <div class="cell"><strong>错误</strong></div>
+              <div class="cell">3分30秒</div>
+              <div class="cell">10:22</div>
+              <div class="cell">只写拉力越大加速度越大，缺少变量控制</div>
+              <div class="cell"><button class="button">查看</button></div>
+            </div>
+            <div class="student-row">
+              <div class="cell"><strong>王强</strong></div>
+              <div class="cell">A</div>
+              <div class="cell"><strong>错误</strong></div>
+              <div class="cell">4分05秒</div>
+              <div class="cell">10:24</div>
+              <div class="cell">比例关系判断错误</div>
+              <div class="cell"><button class="button">查看</button></div>
+            </div>
+            <div class="student-row">
+              <div class="cell"><strong>赵倩</strong></div>
+              <div class="cell">未提交</div>
+              <div class="cell"><strong>-</strong></div>
+              <div class="cell">-</div>
+              <div class="cell">-</div>
+              <div class="cell">需课后提醒补交</div>
+              <div class="cell"><button class="button">提醒</button></div>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
