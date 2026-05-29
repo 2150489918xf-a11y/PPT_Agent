@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduAI Workbench Prototype</title>
+  <style>
+    :root {
+      --ink: #111514;
+      --muted: #737d76;
+      --line: rgba(17, 21, 20, 0.1);
+      --panel: rgba(251, 254, 247, 0.72);
+      --card: rgba(255, 255, 255, 0.66);
+      --lime: #b9ff24;
+      --green: #176843;
+      --deep: #18201c;
+      --shadow: 0 24px 56px rgba(38, 52, 38, 0.12);
+      --radius-xl: 30px;
+      --radius-lg: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif;
+      background:
+        radial-gradient(circle at 10% 55%, rgba(185, 255, 36, 0.22), transparent 18rem),
+        radial-gradient(circle at 78% 14%, rgba(132, 156, 132, 0.18), transparent 24rem),
+        linear-gradient(115deg, #fbfcf4, #e8f1e2);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.16) 1px, transparent 1px);
+      background-size: 38px 38px;
+      opacity: 0.45;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      stroke-width: 2.5;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .prototype {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+      min-height: 100vh;
+      gap: 24px;
+      padding: 20px 28px 28px 20px;
+    }
+
+    .side-nav {
+      position: sticky;
+      top: 20px;
+      height: calc(100vh - 40px);
+      padding: 20px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      border-radius: 24px;
+      background: rgba(253, 255, 251, 0.56);
+      box-shadow: 0 18px 44px rgba(43, 64, 42, 0.08);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 18px;
+      font-weight: 950;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #111416;
+      color: #fff;
+    }
+
+    .logo-grid {
+      width: 22px;
+      height: 22px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 4px;
+    }
+
+    .logo-grid i {
+      border: 2px solid currentColor;
+      border-radius: 3px;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 10px;
+      margin: 28px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .nav-list a {
+      min-height: 48px;
+      padding: 0 14px;
+      border-radius: 14px;
+      color: #475569;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      font-weight: 850;
+    }
+
+    .nav-list a.active {
+      background: #111416;
+      color: #fff;
+    }
+
+    .user {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(17, 20, 22, 0.08);
+    }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #d7ff5e;
+      border: 2px solid #fff;
+      font-size: 18px;
+      font-weight: 950;
+    }
+
+    .user strong,
+    .user span {
+      display: block;
+    }
+
+    .user span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .main {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      min-width: 0;
+    }
+
+    .topbar,
+    .headline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .topbar-title {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 26px;
+      font-weight: 950;
+    }
+
+    .topbar-title span {
+      padding-left: 16px;
+      border-left: 1px solid rgba(17, 21, 20, 0.12);
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 850;
+    }
+
+    .top-actions,
+    .filters {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .search,
+    .round-btn,
+    .pill {
+      border: 1px solid rgba(255, 255, 255, 0.78);
+      background: rgba(255, 255, 255, 0.58);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88);
+      color: #111514;
+    }
+
+    .search {
+      width: 320px;
+      height: 54px;
+      padding: 0 18px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #8f9993;
+      font-size: 14px;
+      font-weight: 750;
+    }
+
+    .round-btn {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+    }
+
+    .headline h1 {
+      margin: 0;
+      font-size: 50px;
+      line-height: 1;
+      font-weight: 950;
+    }
+
+    .headline p {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 850;
+    }
+
+    .pill {
+      min-height: 52px;
+      padding: 0 18px;
+      border-radius: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 950;
+    }
+
+    .pill.primary {
+      border-color: transparent;
+      background: var(--lime);
+      box-shadow: 0 16px 32px rgba(185, 255, 36, 0.28);
+    }
+
+    .entry-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.76);
+      border-radius: var(--radius-xl);
+      background: rgba(253, 255, 250, 0.42);
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    .entry-card {
+      min-height: 150px;
+      position: relative;
+      padding: 22px 64px 22px 22px;
+      border: 1px solid rgba(255, 255, 255, 0.78);
+      border-radius: 22px;
+      background: var(--card);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.84);
+    }
+
+    .entry-card.dark {
+      background:
+        radial-gradient(circle at 76% 12%, rgba(185, 255, 36, 0.18), transparent 6rem),
+        var(--deep);
+      color: #fff;
+    }
+
+    .entry-card h2,
+    .panel h2 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.08;
+      font-weight: 950;
+    }
+
+    .entry-card p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .entry-card.dark p {
+      color: rgba(255, 255, 255, 0.68);
+    }
+
+    .entry-status {
+      width: fit-content;
+      margin-top: 18px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(17, 21, 20, 0.06);
+      color: #344039;
+      font-size: 12px;
+      font-weight: 950;
+    }
+
+    .dark .entry-status {
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    .entry-arrow {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.72);
+      color: #111514;
+      box-shadow: 0 12px 24px rgba(45, 58, 42, 0.08);
+    }
+
+    .dark .entry-arrow {
+      background: var(--lime);
+    }
+
+    .work-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(420px, 0.9fr);
+      gap: 24px;
+    }
+
+    .panel {
+      min-height: 540px;
+      padding: 32px;
+      border: 1px solid rgba(255, 255, 255, 0.76);
+      border-radius: var(--radius-xl);
+      background: var(--panel);
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.82);
+    }
+
+    .kicker {
+      margin: 0 0 10px;
+      color: var(--green);
+      font-size: 14px;
+      font-weight: 950;
+    }
+
+    .panel h2 {
+      font-size: 50px;
+      white-space: nowrap;
+    }
+
+    .panel-copy {
+      margin: 18px 0 0;
+      color: #667069;
+      font-size: 15px;
+      line-height: 1.7;
+      font-weight: 780;
+    }
+
+    .signals {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 18px 0 24px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .signals li {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.46);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .analysis-layout {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.9fr) minmax(300px, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .ai-card {
+      padding: 24px;
+      border-radius: 22px;
+      color: #fff;
+      background:
+        radial-gradient(circle at 70% 100%, rgba(185, 255, 36, 0.18), transparent 38%),
+        linear-gradient(135deg, #263624, #111715 60%);
+      box-shadow: 0 26px 56px rgba(22, 31, 23, 0.3);
+    }
+
+    .tag {
+      width: fit-content;
+      margin-bottom: 36px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--lime);
+      font-size: 12px;
+      font-weight: 950;
+    }
+
+    .ai-card h3 {
+      margin: 0 0 14px;
+      font-size: 24px;
+      line-height: 1.2;
+    }
+
+    .ai-card p {
+      color: rgba(255, 255, 255, 0.76);
+      line-height: 1.75;
+      font-size: 14px;
+      font-weight: 750;
+    }
+
+    .ai-card button {
+      width: 100%;
+      min-height: 52px;
+      margin-top: 14px;
+      border: 0;
+      border-radius: 14px;
+      background: var(--lime);
+      color: #111514;
+      font-weight: 950;
+    }
+
+    .risk-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .risk-top,
+    .task,
+    .mini-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .risk-top {
+      margin-bottom: 8px;
+      font-weight: 950;
+    }
+
+    .risk-tag,
+    .ready-chip {
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(185, 255, 36, 0.26);
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
+    .risk-bar,
+    .progress-bar {
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(17, 21, 20, 0.07);
+      overflow: hidden;
+    }
+
+    .risk-fill,
+    .progress-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--lime), #6dbb3b);
+    }
+
+    .action-grid,
+    .plan-board {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .action-card,
+    .next-class,
+    .task-list,
+    .mini-block {
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.42);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+
+    .action-card {
+      min-height: 78px;
+      padding: 14px;
+      color: #657069;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .action-card strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--ink);
+      font-size: 15px;
+    }
+
+    .plan-head {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .percent {
+      margin: 52px 0 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 850;
+    }
+
+    .percent strong {
+      color: var(--ink);
+      font-size: 26px;
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      color: #7b847d;
+      font-size: 12px;
+      font-weight: 850;
+      margin: 10px 0 22px;
+    }
+
+    .next-class {
+      padding: 18px;
+      margin-bottom: 22px;
+      background:
+        radial-gradient(circle at 92% 0%, rgba(185, 255, 36, 0.18), transparent 8rem),
+        rgba(255, 255, 255, 0.42);
+    }
+
+    .next-class-top {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 850;
+      margin-bottom: 12px;
+    }
+
+    .next-class-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      font-size: 18px;
+      font-weight: 950;
+    }
+
+    .task-list {
+      padding: 12px 18px;
+      margin-bottom: 18px;
+    }
+
+    .task {
+      min-height: 52px;
+      border-bottom: 1px solid rgba(17, 21, 20, 0.07);
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .task:last-child {
+      border-bottom: 0;
+    }
+
+    .plan-board {
+      grid-template-columns: 1fr 1fr;
+      margin-top: 0;
+    }
+
+    .mini-block {
+      padding: 16px;
+    }
+
+    .mini-block h3 {
+      margin: 0 0 10px;
+      color: var(--green);
+      font-size: 14px;
+    }
+
+    .mini-row {
+      min-height: 36px;
+      border-bottom: 1px solid rgba(17, 21, 20, 0.06);
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .mini-row:last-child {
+      border-bottom: 0;
+    }
+
+    .mini-row span:last-child,
+    .task span:last-child {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 1180px) {
+      .prototype {
+        grid-template-columns: 1fr;
+      }
+
+      .side-nav {
+        position: static;
+        height: auto;
+      }
+
+      .entry-grid,
+      .work-grid,
+      .analysis-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .panel h2 {
+        white-space: normal;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="prototype">
+    <aside class="side-nav" aria-label="侧边导航">
+      <div>
+        <div class="brand">
+          <div class="logo" aria-hidden="true">
+            <div class="logo-grid"><i></i><i></i><i></i><i></i></div>
+          </div>
+          EduAI
+        </div>
+        <nav>
+          <ul class="nav-list">
+            <li><a class="active" href="eduai-workbench.html"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>首页</a></li>
+            <li><a href="my-courses.html"><svg viewBox="0 0 24 24"><path d="m3 9 9-5 9 5-9 5-9-5Z"/><path d="m7 11.5v5l5 3 5-3v-5"/></svg>我的课程</a></li>
+            <li><a href="#"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>文档资料</a></li>
+            <li><a href="#"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 17v-5M12 17V8M16 17v-8"/></svg>数据统计</a></li>
+            <li><a href="#"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>新建任务</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="user">
+        <div class="avatar">王</div>
+        <div>
+          <strong>王老师</strong>
+          <span>教师</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="topbar-title">EduAI Workbench <span>教师办公系统</span></div>
+        <div class="top-actions">
+          <div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg>搜索资源、文档...</div>
+          <button class="round-btn" type="button" aria-label="通知"><svg viewBox="0 0 24 24"><path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 0 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5"/><path d="M10 20h4"/></svg></button>
+          <button class="round-btn" type="button" aria-label="帮助"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.4 2.4 0 1 1 3.7 2c-.9.6-1.5 1.1-1.5 2.3"/><path d="M12 17h.01"/></svg></button>
+        </div>
+      </header>
+
+      <section class="headline">
+        <div>
+          <p>欢迎回来，王老师</p>
+          <h1>首页</h1>
+        </div>
+        <div class="filters">
+          <button class="pill" type="button"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>本周</button>
+          <button class="pill primary" type="button"><svg viewBox="0 0 24 24"><path d="M12 3v11"/><path d="m7 10 5 5 5-5"/><path d="M5 19h14"/></svg>导出报表</button>
+        </div>
+      </section>
+
+      <section class="entry-grid" aria-label="核心入口">
+        <article class="entry-card dark">
+          <h2>课前准备</h2>
+          <p>教案、资料与课堂任务</p>
+          <div class="entry-status">3 项待处理</div>
+          <div class="entry-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        </article>
+        <article class="entry-card">
+          <h2>进入课堂</h2>
+          <p>快速开始当前课程</p>
+          <div class="entry-status">下一节 08:30</div>
+          <div class="entry-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        </article>
+        <article class="entry-card">
+          <h2>课后总结</h2>
+          <p>回收反馈与生成纪要</p>
+          <div class="entry-status">2 份待生成</div>
+          <div class="entry-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        </article>
+        <article class="entry-card">
+          <h2>习题库</h2>
+          <p>按知识点管理练习</p>
+          <div class="entry-status">432 道题</div>
+          <div class="entry-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        </article>
+      </section>
+
+      <section class="work-grid">
+        <article class="panel">
+          <p class="kicker">AI 教学建议</p>
+          <h2>本周教学重点分析</h2>
+          <p class="panel-copy">基于上周测验、课堂互动和错题数据，系统自动整理本周需要优先处理的知识点，并生成可直接使用的复习大纲。</p>
+          <ul class="signals">
+            <li>128 条课堂数据</li>
+            <li>5 个薄弱点</li>
+            <li>12% 错误率上升</li>
+          </ul>
+
+          <div class="analysis-layout">
+            <section class="ai-card">
+              <div class="tag">AI 教学建议</div>
+              <h3>定积分应用需要重点复习</h3>
+              <p>学生在该知识点的平均错误率上升了 12%，建议安排 15 分钟例题讲解，并补充 2 组分层练习。</p>
+              <button type="button">生成复习大纲</button>
+            </section>
+
+            <section>
+              <p class="kicker">本周风险诊断</p>
+              <div class="risk-list">
+                <div>
+                  <div class="risk-top"><span>定积分应用</span><span class="risk-tag">错误率 +12%</span></div>
+                  <div class="risk-bar"><div class="risk-fill" style="width: 78%"></div></div>
+                </div>
+                <div>
+                  <div class="risk-top"><span>极限计算</span><span class="risk-tag">需补 6 题</span></div>
+                  <div class="risk-bar"><div class="risk-fill" style="width: 58%"></div></div>
+                </div>
+                <div>
+                  <div class="risk-top"><span>函数连续性</span><span class="risk-tag">3 个班薄弱</span></div>
+                  <div class="risk-bar"><div class="risk-fill" style="width: 46%"></div></div>
+                </div>
+              </div>
+              <div class="action-grid">
+                <div class="action-card"><strong>讲解</strong>15 分钟例题拆解</div>
+                <div class="action-card"><strong>练习</strong>2 组分层训练</div>
+                <div class="action-card"><strong>回收</strong>课后错题追踪</div>
+              </div>
+            </section>
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="plan-head">
+            <div>
+              <p class="kicker">备课进度</p>
+              <h2>本周备课计划</h2>
+            </div>
+            <svg viewBox="0 0 24 24"><path d="M12 5h.01M12 12h.01M12 19h.01"/></svg>
+          </div>
+
+          <div class="percent"><span>本周材料完成度</span><strong>34%</strong></div>
+          <div class="progress-bar"><div class="progress-fill" style="width: 34%"></div></div>
+          <div class="progress-meta"><span>0 项完成</span><span>目标：3 项</span></div>
+
+          <section class="next-class">
+            <div class="next-class-top"><span>下一节课</span><span>周一 08:30 · A203</span></div>
+            <div class="next-class-main"><span>高等数学 · 定积分应用</span><span class="ready-chip">34% 就绪</span></div>
+          </section>
+
+          <p class="kicker">今日待推进</p>
+          <div class="task-list">
+            <div class="task"><span>完善《定积分应用》课件</span><span>待整理</span></div>
+            <div class="task"><span>生成课堂分层练习</span><span>去生成</span></div>
+          </div>
+
+          <div class="plan-board">
+            <section class="mini-block">
+              <h3>待准备课程</h3>
+              <div class="mini-row"><span>高等数学</span><span>周一 08:30</span></div>
+              <div class="mini-row"><span>线性代数</span><span>周四 10:20</span></div>
+              <div class="mini-row"><span>习题讲评</span><span>周五 14:00</span></div>
+            </section>
+            <section class="mini-block">
+              <h3>资料缺口</h3>
+              <div class="mini-row"><span>PPT 更新</span><span>1 份</span></div>
+              <div class="mini-row"><span>课堂练习</span><span>2 组</span></div>
+              <div class="mini-row"><span>错题讲义</span><span>未生成</span></div>
+            </section>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>课程大纲生成页线框原型</title>
+  <style>
+    :root {
+      --ink: #111;
+      --muted: #555;
+      --line: #bdbdbd;
+      --heavy: #222;
+      --bg: #efefef;
+      --paper: #fff;
+      --soft: #f7f7f7;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background: var(--bg);
+      font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+      color: inherit;
+      background: transparent;
+    }
+
+    button {
+      border: 1px solid var(--heavy);
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: 88px minmax(0, 1fr);
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: center;
+      gap: 20px;
+      padding: 14px 20px;
+      border-bottom: 2px solid var(--heavy);
+      background: var(--paper);
+    }
+
+    .back {
+      height: 40px;
+      min-width: 118px;
+      display: grid;
+      place-items: center;
+      text-decoration: none;
+      color: var(--ink);
+      border: 1px solid var(--heavy);
+      background: var(--soft);
+      font-weight: 700;
+    }
+
+    .course-head {
+      min-width: 0;
+      display: grid;
+      gap: 8px;
+    }
+
+    .crumb {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .title-row {
+      display: flex;
+      align-items: end;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .outline-btn {
+      height: 40px;
+      min-width: 112px;
+      background: var(--paper);
+      font-weight: 700;
+    }
+
+    .shell {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 190px minmax(520px, 1fr) 18px 360px;
+    }
+
+    .tool-zone {
+      position: relative;
+      border-right: 1px solid var(--line);
+      background: var(--soft);
+      overflow: visible;
+    }
+
+    .tool-note {
+      position: absolute;
+      left: 16px;
+      top: 18px;
+      width: 128px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .tool-ball {
+      position: absolute;
+      left: 40px;
+      top: 50%;
+      width: 58px;
+      height: 58px;
+      transform: translateY(-50%);
+      border: 2px solid var(--heavy);
+      border-radius: 50%;
+      background: var(--paper);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      z-index: 2;
+    }
+
+    .arc-line {
+      position: absolute;
+      left: 68px;
+      top: calc(50% - 110px);
+      width: 104px;
+      height: 220px;
+      border: 1px dashed #777;
+      border-left: 0;
+      border-radius: 0 118px 118px 0;
+    }
+
+    .arc-item {
+      position: absolute;
+      width: 58px;
+      height: 44px;
+      border: 1px solid var(--heavy);
+      background: var(--paper);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      z-index: 3;
+    }
+
+    .arc-ppt {
+      left: 104px;
+      top: calc(50% - 118px);
+    }
+
+    .arc-plan {
+      left: 118px;
+      top: calc(50% - 22px);
+    }
+
+    .arc-analysis {
+      left: 104px;
+      top: calc(50% + 74px);
+    }
+
+    .main {
+      min-width: 0;
+      overflow: auto;
+      padding: 22px;
+      background: var(--bg);
+    }
+
+    .main-grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .doc {
+      border: 1px solid var(--line);
+      background: var(--paper);
+    }
+
+    .doc-head {
+      min-height: 92px;
+      padding: 18px;
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      gap: 10px;
+    }
+
+    .doc-head h2 {
+      margin: 0;
+      font-size: 26px;
+      line-height: 1.1;
+    }
+
+    .doc-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tag {
+      height: 28px;
+      min-width: 96px;
+      padding: 0 10px;
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .outline-section {
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 90px minmax(0, 1fr);
+      min-height: 152px;
+    }
+
+    .outline-section:last-child {
+      border-bottom: 0;
+    }
+
+    .time-cell {
+      border-right: 1px solid var(--line);
+      padding: 16px 12px;
+      display: grid;
+      align-content: start;
+      gap: 10px;
+      background: var(--soft);
+      font-weight: 800;
+    }
+
+    .time-cell span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 400;
+    }
+
+    .section-body {
+      padding: 16px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .section-body h3 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .detail-box {
+      min-height: 72px;
+      border: 1px solid var(--line);
+      padding: 10px;
+      display: grid;
+      gap: 8px;
+      align-content: start;
+    }
+
+    .detail-box strong {
+      font-size: 14px;
+    }
+
+    .detail-box p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .resize-track {
+      position: relative;
+      border-left: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      background: #e2e2e2;
+      cursor: col-resize;
+    }
+
+    .resize-track::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 18px;
+      bottom: 18px;
+      width: 1px;
+      background: #777;
+      transform: translateX(-50%);
+    }
+
+    .resize-label {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 118px;
+      transform: translate(-50%, -50%) rotate(90deg);
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+      background: #e2e2e2;
+    }
+
+    .ai-panel {
+      min-width: 0;
+      display: grid;
+      grid-template-rows: 70px minmax(0, 1fr) 156px;
+      border-left: 1px solid var(--heavy);
+      background: var(--paper);
+    }
+
+    .ai-head {
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .ai-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border: 2px solid var(--heavy);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--soft);
+      font-size: 13px;
+    }
+
+    .ai-tools {
+      display: flex;
+      gap: 8px;
+    }
+
+    .small-square {
+      width: 30px;
+      height: 30px;
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .chat {
+      min-height: 0;
+      overflow: auto;
+      padding: 16px;
+      display: grid;
+      align-content: start;
+      gap: 16px;
+      background: #fafafa;
+    }
+
+    .message {
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+    }
+
+    .message.user {
+      grid-template-columns: minmax(0, 1fr) 34px;
+    }
+
+    .bubble {
+      border: 1px solid var(--line);
+      background: var(--paper);
+      padding: 12px;
+      min-height: 76px;
+      display: grid;
+      gap: 8px;
+      align-content: start;
+    }
+
+    .bubble p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .input-zone {
+      border-top: 1px solid var(--line);
+      padding: 12px;
+      display: grid;
+      grid-template-rows: minmax(0, 1fr) 38px;
+      gap: 10px;
+    }
+
+    .chat-input {
+      border: 1px solid var(--line);
+      padding: 10px;
+      resize: none;
+      min-height: 72px;
+      color: var(--muted);
+    }
+
+    .send-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+
+    .chat-btn {
+      border: 1px solid var(--heavy);
+      font-weight: 700;
+      background: var(--paper);
+    }
+
+    @media (max-width: 1180px) {
+      .shell {
+        grid-template-columns: 172px minmax(420px, 1fr) 18px 320px;
+      }
+
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <a class="back" href="my-courses-wireframe.html">返回我的课程</a>
+      <div class="course-head">
+        <p class="crumb">当前位置：课前 / 我的课程 / 课程大纲生成</p>
+        <div class="title-row">
+          <h1>牛顿第一定律</h1>
+          <span class="meta">八年级物理 · 45分钟 · 3个知识点 · 已保存草稿</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="shell">
+      <aside class="tool-zone" aria-label="悬浮工具入口">
+        <p class="tool-note">静默状态收起为单个工具球；点击后沿弧线展开工具入口。</p>
+        <div class="arc-line" aria-hidden="true"></div>
+        <div class="tool-ball">AI</div>
+        <button class="arc-item arc-ppt">PPT</button>
+        <button class="arc-item arc-plan">教案</button>
+        <button class="arc-item arc-analysis">分析</button>
+      </aside>
+
+      <section class="main" aria-label="课程大纲主体">
+        <div class="main-grid">
+          <article class="doc">
+            <header class="doc-head">
+              <h2>牛顿第一定律课程大纲</h2>
+              <div class="doc-tags">
+                <span class="tag">核心概念：惯性</span>
+                <span class="tag">实验探究</span>
+                <span class="tag">生活案例</span>
+                <span class="tag">课堂检测</span>
+              </div>
+            </header>
+
+            <section class="outline-section">
+              <div class="time-cell">01<span>0-8分钟</span></div>
+              <div class="section-body">
+                <h3>情境导入：运动为什么会改变</h3>
+                <div class="detail-grid">
+                  <div class="detail-box">
+                    <strong>教学意图</strong>
+                    <p>用生活现象建立问题意识，引出力与运动状态的关系。</p>
+                  </div>
+                  <div class="detail-box">
+                    <strong>教师动作</strong>
+                    <p>展示公交急刹、桌布抽离等案例，组织学生描述观察结果。</p>
+                  </div>
+                  <div class="detail-box">
+                    <strong>学生产出</strong>
+                    <p>提出初步猜想，并记录运动状态变化的共同特征。</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="outline-section">
+              <div class="time-cell">02<span>8-25分钟</span></div>
+              <div class="section-body">
+                <h3>实验探究：阻力越小会发生什么</h3>
+                <div class="detail-grid">
+                  <div class="detail-box">
+                    <strong>关键内容</strong>
+                    <p>斜面小车实验、阻力变化、理想实验推理。</p>
+                  </div>
+                  <div class="detail-box">
+                    <strong>教师动作</strong>
+                    <p>引导学生比较毛巾、棉布、木板表面上的运动距离。</p>
+                  </div>
+                  <div class="detail-box">
+                    <strong>学生产出</strong>
+                    <p>完成实验记录表，并归纳阻力与运动距离的关系。</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="outline-section">
+              <div class="time-cell">03<span>25-38分钟</span></div>
+              <div class="section-body">
+                <h3>概念建构：牛顿第一定律与惯性</h3>
+                <div class="detail-grid">
+                  <div class="detail-box">
+                    <strong>关键内容</strong>
+                    <p>不受力时保持静止或匀速直线运动状态；惯性是物体属性。</p>
+                  </div>
+                  <div class="detail-box">
+                    <strong>教师动作</strong>
+                    <p>对比学生猜想与定律表述，标注易混点。</p>
+                  </div>
+                  <div class="detail-box">
+                    <strong>学生产出</strong>
+                    <p>用自己的话解释定律，并辨析力不是维持运动的原因。</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="outline-section">
+              <div class="time-cell">04<span>38-45分钟</span></div>
+              <div class="section-body">
+                <h3>课堂检测：迁移应用与出口题</h3>
+                <div class="detail-grid">
+                  <div class="detail-box">
+                    <strong>检测方式</strong>
+                    <p>2 道选择题、1 道情境解释题、1 个口头追问。</p>
+                  </div>
+                  <div class="detail-box">
+                    <strong>风险知识点</strong>
+                    <p>惯性大小与速度无关；力改变运动状态。</p>
+                  </div>
+                  <div class="detail-box">
+                    <strong>后续材料</strong>
+                    <p>生成 PPT、教案和学情分析时复用本大纲结构。</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </article>
+        </div>
+      </section>
+
+      <div class="resize-track" aria-label="拖动调整 AI 对话框宽度">
+        <span class="resize-label">拖动调整宽度</span>
+      </div>
+
+      <aside class="ai-panel" aria-label="AI 对话框">
+        <header class="ai-head">
+          <div class="ai-title">
+            <span class="avatar">AI</span>
+            <span>AI 教学助手</span>
+          </div>
+        </header>
+
+        <section class="chat">
+          <div class="message">
+            <span class="avatar">AI</span>
+            <div class="bubble">
+              <strong>大纲已生成，可以继续细化。</strong>
+              <p>你可以让我把某个环节展开成板书、课堂提问、PPT 页面结构或练习题。</p>
+            </div>
+          </div>
+          <div class="message user">
+            <div class="bubble">
+              <strong>教师输入示例</strong>
+              <p>把第二环节的实验步骤写得更适合 8 年级学生。</p>
+            </div>
+            <span class="avatar">我</span>
+          </div>
+        </section>
+
+        <footer class="input-zone">
+          <textarea class="chat-input">输入要调整的课程大纲要求...</textarea>
+          <div class="send-row">
+            <button class="chat-btn">语音</button>
+            <button class="chat-btn">清空</button>
+            <button class="chat-btn">发送</button>
+          </div>
+        </footer>
+      </aside>
+    </main>
+  </div>
+</body>
+</html>

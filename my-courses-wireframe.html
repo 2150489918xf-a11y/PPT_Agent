@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>我的课程线框原型</title>
+  <style>
+    :root {
+      --ink: #111;
+      --muted: #555;
+      --line: #c7c7c7;
+      --strong: #222;
+      --bg: #efefef;
+      --white: #fff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background: var(--bg);
+      font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+    }
+
+    button,
+    input {
+      font: inherit;
+      color: inherit;
+      background: transparent;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 160px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      border-right: 1px solid var(--line);
+      background: #f7f7f7;
+    }
+
+    .side-title {
+      height: 116px;
+      padding: 16px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .side-title h2 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .side-title p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .nav {
+      display: grid;
+    }
+
+    .nav a {
+      height: 54px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 14px;
+      border-bottom: 1px solid var(--line);
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    .nav a.active {
+      background: var(--strong);
+      color: #fff;
+    }
+
+    .icon {
+      width: 16px;
+      height: 16px;
+      border: 2px solid currentColor;
+      flex: 0 0 auto;
+    }
+
+    .main {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      min-height: 116px;
+      padding: 14px 18px 16px;
+      border-bottom: 2px solid #1686ff;
+      background: var(--white);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .headline-block {
+      display: grid;
+      gap: 8px;
+    }
+
+    .title-row {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .crumb {
+      margin: 0 0 6px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .page-title {
+      margin: 0;
+      font-size: 36px;
+      line-height: 1.05;
+    }
+
+    .top-actions,
+    .page-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .page-actions {
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .search {
+      width: 360px;
+      height: 38px;
+      border: 1px solid #999;
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      background: #fafafa;
+    }
+
+    .search-mark {
+      width: 14px;
+      height: 14px;
+      border: 2px solid #777;
+      position: relative;
+    }
+
+    .search-mark::after {
+      content: "";
+      position: absolute;
+      right: -7px;
+      bottom: -4px;
+      width: 8px;
+      height: 2px;
+      background: #777;
+      transform: rotate(45deg);
+    }
+
+    .action {
+      height: 38px;
+      min-width: 120px;
+      border: 1px solid var(--strong);
+      background: var(--strong);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .action.large {
+      height: 42px;
+      min-width: 170px;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .content {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .tabs {
+      display: flex;
+      align-items: center;
+    }
+
+    .filter-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .tab {
+      height: 36px;
+      min-width: 84px;
+      border: 1px solid var(--line);
+      border-right: 0;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+    }
+
+    .tab:last-child {
+      border-right: 1px solid var(--line);
+    }
+
+    .tab.active {
+      background: var(--strong);
+      color: #fff;
+      border-color: var(--strong);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(480px, 0.75fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .section {
+      border: 1px solid var(--line);
+      background: var(--white);
+    }
+
+    .section-title {
+      min-height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 16px;
+      border-bottom: 1px solid var(--line);
+      background: #f1f1f1;
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .count {
+      border: 1px solid #888;
+      padding: 3px 10px;
+      font-size: 13px;
+      font-weight: 700;
+      background: #fff;
+    }
+
+    .list-body,
+    .detail-body {
+      padding: 20px;
+    }
+
+    .course-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .course-item {
+      min-height: 116px;
+      border: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 54px minmax(0, 1fr) 86px;
+      gap: 14px;
+      align-items: start;
+      padding: 16px;
+      background: #fff;
+    }
+
+    .course-item.active {
+      outline: 2px solid var(--strong);
+      outline-offset: -2px;
+    }
+
+    .course-icon {
+      width: 40px;
+      height: 40px;
+      border: 1px solid #999;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .course-item h3 {
+      margin: 0 0 8px;
+      font-size: 19px;
+    }
+
+    .course-item p {
+      margin: 0 0 10px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .meta-line {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .status {
+      justify-self: end;
+      width: fit-content;
+      border: 1px solid #777;
+      padding: 4px 10px;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .metric {
+      min-height: 92px;
+      border: 1px solid var(--line);
+      padding: 14px;
+    }
+
+    .metric strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 28px;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .detail-card {
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .detail-head {
+      padding: 18px;
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .detail-head h2 {
+      margin: 8px 0;
+      font-size: 30px;
+      line-height: 1.15;
+    }
+
+    .detail-head p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .detail-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .detail-table th,
+    .detail-table td {
+      border-bottom: 1px solid var(--line);
+      padding: 14px 18px;
+      text-align: left;
+      vertical-align: top;
+      font-size: 15px;
+    }
+
+    .detail-table th {
+      width: 140px;
+      color: var(--muted);
+      font-weight: 700;
+      background: #fafafa;
+    }
+
+    .detail-actions {
+      display: flex;
+      gap: 12px;
+      padding: 18px;
+    }
+
+    .line-button {
+      height: 38px;
+      min-width: 110px;
+      border: 1px solid #777;
+      font-weight: 700;
+    }
+
+    .line-button.primary {
+      background: var(--strong);
+      border-color: var(--strong);
+      color: #fff;
+    }
+
+    .placeholder-note {
+      margin-top: 20px;
+      border: 1px dashed #aaa;
+      padding: 16px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .placeholder-note h3 {
+      margin: 0 0 8px;
+      color: var(--ink);
+      font-size: 18px;
+    }
+
+    @media (max-width: 1100px) {
+      .app,
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="side-title">
+        <h2>课前</h2>
+        <p>我的课程原型</p>
+      </div>
+      <nav class="nav" aria-label="主导航">
+        <a href="eduai-workbench-wireframe.html"><span class="icon"></span>首页</a>
+        <a class="active" href="#"><span class="icon"></span>课前</a>
+        <a href="#"><span class="icon"></span>课中</a>
+        <a href="#"><span class="icon"></span>课后</a>
+        <a href="#"><span class="icon"></span>题库</a>
+        <a href="#"><span class="icon"></span>知识库</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="headline-block">
+          <p class="crumb">当前位置：课前 / 我的课程</p>
+          <div class="title-row">
+            <h1 class="page-title">我的课程</h1>
+            <button class="action large" type="button">+ 新建课程</button>
+          </div>
+        </div>
+        <div class="page-actions">
+          <div class="tabs">
+            <button class="tab active" type="button">全部</button>
+            <button class="tab" type="button">进行中</button>
+            <button class="tab" type="button">已完成</button>
+            <button class="tab" type="button">未开始</button>
+          </div>
+          <div class="search"><span class="search-mark"></span>搜索课程、年级、学科</div>
+        </div>
+      </header>
+
+      <div class="content">
+        <section class="layout">
+          <article class="section">
+            <div class="section-title">
+              <span>课程列表</span>
+              <span class="count">3 门课程</span>
+            </div>
+            <div class="list-body">
+              <div class="course-list">
+                <section class="course-item active">
+                  <div class="course-icon">课</div>
+                  <div>
+                    <h3>初二 · 牛顿第二定律</h3>
+                    <p>用于课堂讲解力、质量与加速度关系，当前处于待完善状态。</p>
+                    <div class="meta-line">
+                      <span>初二</span>
+                      <span>物理</span>
+                      <span>45 分钟</span>
+                    </div>
+                  </div>
+                  <div class="status">未开始</div>
+                </section>
+
+                <section class="course-item">
+                  <div class="course-icon">课</div>
+                  <div>
+                    <h3>高一 · 函数单调性</h3>
+                    <p>包含函数图像观察、例题讲解与分层练习，已有部分资料。</p>
+                    <div class="meta-line">
+                      <span>高一</span>
+                      <span>数学</span>
+                      <span>40 分钟</span>
+                    </div>
+                  </div>
+                  <div class="status">进行中</div>
+                </section>
+
+                <section class="course-item">
+                  <div class="course-icon">课</div>
+                  <div>
+                    <h3>初三 · 化学方程式</h3>
+                    <p>复习方程式配平与实验现象描述，课程已归档。</p>
+                    <div class="meta-line">
+                      <span>初三</span>
+                      <span>化学</span>
+                      <span>45 分钟</span>
+                    </div>
+                  </div>
+                  <div class="status">已完成</div>
+                </section>
+              </div>
+            </div>
+          </article>
+
+          <aside class="section">
+            <div class="section-title">
+              <span>课程详情</span>
+              <span class="count">当前选中</span>
+            </div>
+            <div class="detail-body">
+              <div class="metric-grid">
+                <div class="metric"><strong>45</strong><span>课时时长 / 分钟</span></div>
+                <div class="metric"><strong>6</strong><span>核心知识点</span></div>
+                <div class="metric"><strong>3</strong><span>待补充材料</span></div>
+              </div>
+
+              <section class="detail-card">
+                <div class="detail-head">
+                  <div>
+                    <div class="status">未开始</div>
+                    <h2>初二 · 牛顿第二定律</h2>
+                    <p>初二 · 物理 · 45 分钟</p>
+                  </div>
+                  <button class="line-button primary" type="button">继续设计</button>
+                </div>
+
+                <table class="detail-table">
+                  <tbody>
+                    <tr>
+                      <th>年级</th>
+                      <td>初二</td>
+                    </tr>
+                    <tr>
+                      <th>学科</th>
+                      <td>物理 · 牛顿第二定律</td>
+                    </tr>
+                    <tr>
+                      <th>课时时长</th>
+                      <td>45 分钟</td>
+                    </tr>
+                    <tr>
+                      <th>备课时间</th>
+                      <td>05/28 19:43</td>
+                    </tr>
+                    <tr>
+                      <th>教学目标</th>
+                      <td>理解力、质量与加速度关系；能够用公式解决基础问题。</td>
+                    </tr>
+                    <tr>
+                      <th>核心知识点</th>
+                      <td>待补充</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <div class="detail-actions">
+                  <button class="line-button primary" type="button">继续设计</button>
+                  <button class="line-button" type="button">导出课程</button>
+                  <button class="line-button" type="button">复制课程</button>
+                </div>
+              </section>
+
+              <section class="placeholder-note">
+                <h3>我的课程摘要</h3>
+                <p>右侧保留课程详情、关键指标、操作按钮等真实信息结构，用于确认我的课程页面的内容密度和交互入口。</p>
+              </section>
+            </div>
+          </aside>
+        </section>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

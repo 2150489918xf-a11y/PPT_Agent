@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PPT 生成页线框原型</title>
+  <style>
+    :root {
+      --ink: #111;
+      --muted: #555;
+      --line: #c7c7c7;
+      --heavy: #222;
+      --bg: #efefef;
+      --white: #fff;
+      --panel: #f7f7f7;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background: var(--bg);
+      font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    button,
+    textarea {
+      font: inherit;
+      color: inherit;
+      background: transparent;
+    }
+
+    button {
+      border: 1px solid var(--heavy);
+      font-weight: 700;
+    }
+
+    .app {
+      height: 100vh;
+      display: grid;
+      grid-template-rows: 54px minmax(0, 1fr);
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 14px;
+      padding: 0 14px;
+      border-bottom: 1px solid var(--heavy);
+      background: var(--white);
+    }
+
+    .back {
+      height: 34px;
+      min-width: 76px;
+      background: var(--white);
+    }
+
+    .doc-title {
+      min-width: 0;
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .doc-title strong {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .doc-title span {
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .top-btn {
+      height: 34px;
+      min-width: 92px;
+      padding: 0 12px;
+      background: var(--white);
+    }
+
+    .workspace {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 220px minmax(560px, 1fr) 360px;
+      overflow: hidden;
+    }
+
+    .slides {
+      min-height: 0;
+      padding: 14px 12px;
+      border-right: 1px solid var(--line);
+      background: var(--panel);
+      overflow: auto;
+    }
+
+    .slides-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-weight: 900;
+    }
+
+    .slides-head span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 400;
+    }
+
+    .thumb-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .thumb {
+      display: grid;
+      grid-template-columns: 24px minmax(0, 1fr);
+      gap: 8px;
+      align-items: start;
+    }
+
+    .thumb-index {
+      padding-top: 26px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .thumb-slide {
+      aspect-ratio: 16 / 9;
+      border: 1px solid var(--line);
+      background: var(--white);
+      position: relative;
+    }
+
+    .thumb.active .thumb-slide {
+      border: 2px solid var(--heavy);
+    }
+
+    .thumb-title {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .thumb-line {
+      position: absolute;
+      left: 10px;
+      right: 14px;
+      bottom: 12px;
+      height: 1px;
+      background: var(--line);
+    }
+
+    .thumb-grid {
+      position: absolute;
+      inset: 28px 12px 14px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px;
+    }
+
+    .thumb-box {
+      border: 1px solid var(--line);
+      background: #fafafa;
+    }
+
+    .stage {
+      min-width: 0;
+      min-height: 0;
+      display: grid;
+      grid-template-rows: minmax(0, 1fr) 74px;
+      padding: 28px 32px 16px;
+      background: var(--bg);
+      overflow: hidden;
+    }
+
+    .canvas-wrap {
+      min-height: 0;
+      display: grid;
+      place-items: center;
+    }
+
+    .slide-canvas {
+      width: min(100%, 920px);
+      aspect-ratio: 16 / 9;
+      border: 2px solid var(--heavy);
+      background: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide-placeholder {
+      position: absolute;
+      inset: 32px;
+      border: 1px solid var(--line);
+    }
+
+    .slide-copy {
+      position: absolute;
+      left: 8%;
+      top: 28%;
+      display: grid;
+      gap: 12px;
+    }
+
+    .slide-copy h1 {
+      margin: 0;
+      font-size: 34px;
+      line-height: 1.1;
+    }
+
+    .slide-copy p,
+    .slide-copy small {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .slide-graphic {
+      position: absolute;
+      right: 14%;
+      top: 34%;
+      width: 130px;
+      height: 130px;
+      border: 1px solid var(--line);
+    }
+
+    .diagram-line {
+      position: absolute;
+      left: 28px;
+      top: 64px;
+      width: 86px;
+      height: 1px;
+      background: var(--heavy);
+      transform: rotate(42deg);
+    }
+
+    .diagram-line.second {
+      left: 40px;
+      top: 42px;
+      width: 76px;
+      transform: rotate(-132deg);
+    }
+
+    .diagram-dot {
+      position: absolute;
+      left: 54px;
+      top: 46px;
+      width: 22px;
+      height: 22px;
+      border: 2px solid var(--heavy);
+      border-radius: 50%;
+      background: var(--white);
+    }
+
+    .slide-footer-line {
+      position: absolute;
+      left: 8%;
+      bottom: 10%;
+      width: 24%;
+      height: 1px;
+      background: var(--line);
+    }
+
+    .stage-footer {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .pager {
+      justify-self: center;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .page-btn {
+      width: 72px;
+      height: 34px;
+      background: var(--white);
+      white-space: nowrap;
+    }
+
+    .page-count {
+      min-width: 58px;
+      text-align: center;
+      font-weight: 800;
+    }
+
+    .ai {
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      border-left: 1px solid var(--line);
+      background: var(--panel);
+      overflow: hidden;
+    }
+
+    .ai-head {
+      padding: 16px;
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      gap: 8px;
+    }
+
+    .ai-head h2 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.1;
+    }
+
+    .ai-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .chat {
+      min-height: 0;
+      overflow: auto;
+      padding: 14px 16px;
+      display: grid;
+      align-content: start;
+      gap: 12px;
+    }
+
+    .message {
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+    }
+
+    .message.user {
+      grid-template-columns: minmax(0, 1fr) 34px;
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border: 2px solid var(--heavy);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--white);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .bubble {
+      border: 1px solid var(--line);
+      background: var(--white);
+      padding: 12px;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .bubble.user {
+      border-color: var(--heavy);
+    }
+
+    .bubble strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .input-area {
+      padding: 14px 16px;
+      border-top: 1px solid var(--line);
+      display: grid;
+      gap: 10px;
+    }
+
+    .prompt {
+      width: 100%;
+      height: 90px;
+      resize: none;
+      border: 1px solid var(--line);
+      padding: 12px;
+      background: var(--white);
+      color: var(--muted);
+    }
+
+    .send-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .chat-btn {
+      height: 36px;
+      background: var(--white);
+    }
+
+    @media (max-width: 1180px) {
+      .workspace {
+        grid-template-columns: 180px minmax(460px, 1fr) 320px;
+      }
+
+      .stage {
+        padding-inline: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <button class="back">返回</button>
+      <div class="doc-title">
+        <strong>牛顿第二定律</strong>
+        <span>PPT 课件 · 12 页</span>
+      </div>
+      <div class="top-actions">
+        <button class="top-btn">预览教案</button>
+        <button class="top-btn">导出</button>
+        <button class="top-btn">重新生成</button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="slides" aria-label="幻灯片缩略图">
+        <div class="slides-head">
+          <strong>幻灯片</strong>
+          <span>12 页</span>
+        </div>
+        <div class="thumb-list">
+          <div class="thumb active">
+            <span class="thumb-index">1</span>
+            <div class="thumb-slide">
+              <span class="thumb-title">牛顿第二定律</span>
+              <span class="thumb-line"></span>
+            </div>
+          </div>
+          <div class="thumb">
+            <span class="thumb-index">2</span>
+            <div class="thumb-slide">
+              <span class="thumb-title">课堂目标</span>
+              <div class="thumb-grid">
+                <span class="thumb-box"></span>
+                <span class="thumb-box"></span>
+                <span class="thumb-box"></span>
+              </div>
+            </div>
+          </div>
+          <div class="thumb">
+            <span class="thumb-index">3</span>
+            <div class="thumb-slide">
+              <span class="thumb-title">情境导入</span>
+              <span class="thumb-line"></span>
+            </div>
+          </div>
+          <div class="thumb">
+            <span class="thumb-index">4</span>
+            <div class="thumb-slide">
+              <span class="thumb-title">实验探究</span>
+              <div class="thumb-grid">
+                <span class="thumb-box"></span>
+                <span class="thumb-box"></span>
+                <span class="thumb-box"></span>
+              </div>
+            </div>
+          </div>
+          <div class="thumb">
+            <span class="thumb-index">5</span>
+            <div class="thumb-slide">
+              <span class="thumb-title">公式建构</span>
+              <span class="thumb-line"></span>
+            </div>
+          </div>
+          <div class="thumb">
+            <span class="thumb-index">6</span>
+            <div class="thumb-slide">
+              <span class="thumb-title">变量关系</span>
+              <div class="thumb-grid">
+                <span class="thumb-box"></span>
+                <span class="thumb-box"></span>
+                <span class="thumb-box"></span>
+              </div>
+            </div>
+          </div>
+          <div class="thumb">
+            <span class="thumb-index">7</span>
+            <div class="thumb-slide">
+              <span class="thumb-title">例题讲解</span>
+              <span class="thumb-line"></span>
+            </div>
+          </div>
+          <div class="thumb">
+            <span class="thumb-index">8</span>
+            <div class="thumb-slide">
+              <span class="thumb-title">课堂练习</span>
+              <div class="thumb-grid">
+                <span class="thumb-box"></span>
+                <span class="thumb-box"></span>
+                <span class="thumb-box"></span>
+              </div>
+            </div>
+          </div>
+          <div class="thumb">
+            <span class="thumb-index">9</span>
+            <div class="thumb-slide">
+              <span class="thumb-title">错因分析</span>
+              <span class="thumb-line"></span>
+            </div>
+          </div>
+          <div class="thumb">
+            <span class="thumb-index">10</span>
+            <div class="thumb-slide">
+              <span class="thumb-title">生活应用</span>
+              <div class="thumb-grid">
+                <span class="thumb-box"></span>
+                <span class="thumb-box"></span>
+                <span class="thumb-box"></span>
+              </div>
+            </div>
+          </div>
+          <div class="thumb">
+            <span class="thumb-index">11</span>
+            <div class="thumb-slide">
+              <span class="thumb-title">课堂小结</span>
+              <span class="thumb-line"></span>
+            </div>
+          </div>
+          <div class="thumb">
+            <span class="thumb-index">12</span>
+            <div class="thumb-slide">
+              <span class="thumb-title">课后任务</span>
+              <div class="thumb-grid">
+                <span class="thumb-box"></span>
+                <span class="thumb-box"></span>
+                <span class="thumb-box"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <section class="stage" aria-label="PPT 画布">
+        <div class="canvas-wrap">
+          <article class="slide-canvas">
+            <div class="slide-placeholder"></div>
+            <div class="slide-copy">
+              <h1>牛顿第二定律</h1>
+              <p>力与加速度的定量关系</p>
+              <small>授课年级：高中<br />授课时长：45 分钟</small>
+            </div>
+            <div class="slide-graphic" aria-hidden="true">
+              <span class="diagram-line"></span>
+              <span class="diagram-line second"></span>
+              <span class="diagram-dot"></span>
+            </div>
+            <span class="slide-footer-line"></span>
+          </article>
+        </div>
+
+        <footer class="stage-footer">
+          <span></span>
+          <div class="pager">
+            <button class="page-btn">上一页</button>
+            <span class="page-count">1 / 12</span>
+            <button class="page-btn">下一页</button>
+          </div>
+          <span></span>
+        </footer>
+      </section>
+
+      <aside class="ai" aria-label="AI 对话框">
+        <header class="ai-head">
+          <h2>PPT 修改</h2>
+          <p>当前页：第 1 页。这里展示 AI 对当前页面结构、内容和讲解重点的建议。</p>
+        </header>
+
+        <section class="chat">
+          <div class="message">
+            <span class="avatar">AI</span>
+            <div class="bubble">
+              <strong>当前页</strong>
+              这页作为封面页，建议说明课程主题、授课对象和主要知识点。
+            </div>
+          </div>
+          <div class="message user">
+            <div class="bubble user">
+              <strong>老师</strong>
+              高中物理，牛顿第二定律，要突出公式 F=ma，45 分钟。
+            </div>
+            <span class="avatar">我</span>
+          </div>
+          <div class="message">
+            <span class="avatar">AI</span>
+            <div class="bubble">
+              <strong>AI 建议</strong>
+              可以把副标题改成“从实验到 F=ma”，并在后续页面增加实验变量对比表。
+            </div>
+          </div>
+        </section>
+
+        <footer class="input-area">
+          <textarea class="prompt">输入你想让 AI 调整、补充或继续生成的内容</textarea>
+          <div class="send-row">
+            <button class="chat-btn">语音</button>
+            <button class="chat-btn">清空</button>
+            <button class="chat-btn">发送</button>
+          </div>
+        </footer>
+      </aside>
+    </main>
+  </div>
+</body>
+</html>

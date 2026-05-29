@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>首页线框原型</title>
+  <style>
+    :root {
+      --ink: #111;
+      --muted: #555;
+      --line: #c7c7c7;
+      --strong: #222;
+      --bg: #efefef;
+      --panel: #f8f8f8;
+      --white: #fff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background: var(--bg);
+      font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+    }
+
+    button,
+    input {
+      font: inherit;
+      color: inherit;
+      background: transparent;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 160px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      border-right: 1px solid var(--line);
+      background: #f7f7f7;
+    }
+
+    .side-title {
+      height: 116px;
+      padding: 16px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .side-title h2 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .side-title p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .nav {
+      display: grid;
+    }
+
+    .nav a {
+      height: 54px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 14px;
+      border-bottom: 1px solid var(--line);
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    .nav a.active {
+      background: var(--strong);
+      color: #fff;
+    }
+
+    .icon {
+      width: 16px;
+      height: 16px;
+      border: 2px solid currentColor;
+      border-radius: 50%;
+      flex: 0 0 auto;
+    }
+
+    .main {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      min-height: 116px;
+      padding: 14px 18px 16px;
+      border-bottom: 2px solid #1686ff;
+      background: var(--white);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .crumb {
+      margin: 0 0 6px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .page-title {
+      margin: 0;
+      font-size: 36px;
+      line-height: 1.05;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .search {
+      width: 360px;
+      height: 38px;
+      border: 1px solid #999;
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      background: #fafafa;
+    }
+
+    .search-mark {
+      width: 14px;
+      height: 14px;
+      border: 2px solid #777;
+      border-radius: 50%;
+      position: relative;
+    }
+
+    .search-mark::after {
+      content: "";
+      position: absolute;
+      right: -7px;
+      bottom: -4px;
+      width: 8px;
+      height: 2px;
+      background: #777;
+      transform: rotate(45deg);
+    }
+
+    .action {
+      height: 38px;
+      min-width: 120px;
+      border: 1px solid var(--strong);
+      background: var(--strong);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .content {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .section {
+      border: 1px solid var(--line);
+      background: var(--white);
+    }
+
+    .section-title {
+      min-height: 46px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      border-bottom: 1px solid var(--line);
+      background: #f1f1f1;
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .entry-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .entry-card {
+      min-height: 286px;
+      padding: 20px;
+      border-right: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .entry-card:last-child {
+      border-right: 0;
+    }
+
+    .square-icon {
+      width: 40px;
+      height: 40px;
+      border: 1px solid #999;
+      display: grid;
+      place-items: center;
+      margin-bottom: 24px;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .entry-card h3 {
+      margin: 0 0 12px;
+      font-size: 24px;
+    }
+
+    .entry-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .entry-spacer {
+      flex: 1;
+    }
+
+    .info-box {
+      min-height: 36px;
+      border: 1px dashed #aaa;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      margin-bottom: 12px;
+      color: #333;
+    }
+
+    .line-button {
+      height: 36px;
+      border: 1px solid #777;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(420px, 0.95fr);
+      gap: 20px;
+    }
+
+    .analysis-body,
+    .plan-body {
+      padding: 20px;
+    }
+
+    .analysis-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .analysis-item {
+      min-height: 118px;
+      border: 1px solid var(--line);
+      padding: 18px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 90px;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .analysis-item h3 {
+      margin: 0 0 8px;
+      font-size: 19px;
+    }
+
+    .analysis-item p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .small-tag {
+      justify-self: end;
+      width: fit-content;
+      border: 1px solid #777;
+      padding: 4px 10px;
+      font-size: 13px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 54px;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .bar {
+      height: 10px;
+      background: #ddd;
+      overflow: hidden;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      background: #333;
+    }
+
+    .percent {
+      font-weight: 800;
+      text-align: right;
+    }
+
+    .plan-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 18px;
+    }
+
+    .plan-table th,
+    .plan-table td {
+      border: 1px solid var(--line);
+      padding: 14px;
+      text-align: left;
+      vertical-align: top;
+      font-size: 15px;
+    }
+
+    .plan-table th {
+      background: #f0f0f0;
+      font-weight: 800;
+    }
+
+    .plan-table td:nth-child(2) {
+      font-weight: 800;
+    }
+
+    .note {
+      border: 1px dashed #aaa;
+      padding: 18px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .note h3 {
+      margin: 0 0 8px;
+      color: var(--ink);
+      font-size: 18px;
+    }
+
+    @media (max-width: 1100px) {
+      .app,
+      .two-col,
+      .entry-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .entry-card {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .entry-card:last-child {
+        border-bottom: 0;
+      }
+
+      .topbar {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="side-title">
+        <h2>首页</h2>
+        <p>教学工作台原型</p>
+      </div>
+      <nav class="nav" aria-label="主导航">
+        <a class="active" href="#"><span class="icon"></span>首页</a>
+        <a href="#"><span class="icon"></span>课前</a>
+        <a href="#"><span class="icon"></span>课中</a>
+        <a href="#"><span class="icon"></span>课后</a>
+        <a href="#"><span class="icon"></span>题库</a>
+        <a href="#"><span class="icon"></span>知识库</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="crumb">当前位置：首页 / 教学概览</p>
+          <h1 class="page-title">首页</h1>
+        </div>
+        <div class="top-actions">
+          <div class="search"><span class="search-mark"></span>搜索课程、学生、题目、知识点</div>
+          <button class="action" type="button">操作区</button>
+        </div>
+      </header>
+
+      <div class="content">
+        <section class="section">
+          <div class="section-title">入口卡片区</div>
+          <div class="entry-grid">
+            <article class="entry-card">
+              <div class="square-icon">▣</div>
+              <h3>课前准备</h3>
+              <p>教案、课件、预习任务、资料检查</p>
+              <div class="entry-spacer"></div>
+              <div class="info-box">3 项待确认</div>
+              <button class="line-button" type="button">进入</button>
+            </article>
+            <article class="entry-card">
+              <div class="square-icon">▶</div>
+              <h3>进入课堂</h3>
+              <p>开始授课、课堂互动、随堂检测</p>
+              <div class="entry-spacer"></div>
+              <div class="info-box">下一节 10:10</div>
+              <button class="line-button" type="button">进入</button>
+            </article>
+            <article class="entry-card">
+              <div class="square-icon">□</div>
+              <h3>课后总结</h3>
+              <p>课堂记录、学情报告、作业发布</p>
+              <div class="entry-spacer"></div>
+              <div class="info-box">2 份待生成</div>
+              <button class="line-button" type="button">进入</button>
+            </article>
+            <article class="entry-card">
+              <div class="square-icon">◎</div>
+              <h3>习题库</h3>
+              <p>按知识点筛题、组卷、生成练习</p>
+              <div class="entry-spacer"></div>
+              <div class="info-box">128 道相关题</div>
+              <button class="line-button" type="button">进入</button>
+            </article>
+          </div>
+        </section>
+
+        <section class="two-col">
+          <article class="section">
+            <div class="section-title">本周教学重点分析</div>
+            <div class="analysis-body">
+              <div class="analysis-list">
+                <section class="analysis-item">
+                  <div>
+                    <h3>二次函数图像与性质</h3>
+                    <p>近期错题集中，建议课中增加例题讲解</p>
+                    <div class="bar-row">
+                      <div class="bar"><span style="width: 72%"></span></div>
+                      <div class="percent">72%</div>
+                    </div>
+                  </div>
+                  <div class="small-tag">重点</div>
+                </section>
+                <section class="analysis-item">
+                  <div>
+                    <h3>课堂互动参与度</h3>
+                    <p>整体参与正常，后排学生响应偏低</p>
+                    <div class="bar-row">
+                      <div class="bar"><span style="width: 84%"></span></div>
+                      <div class="percent">84%</div>
+                    </div>
+                  </div>
+                  <div class="small-tag">正常</div>
+                </section>
+                <section class="analysis-item">
+                  <div>
+                    <h3>作业订正完成率</h3>
+                    <p>订正提交滞后，需要课后提醒</p>
+                    <div class="bar-row">
+                      <div class="bar"><span style="width: 61%"></span></div>
+                      <div class="percent">61%</div>
+                    </div>
+                  </div>
+                  <div class="small-tag">跟进</div>
+                </section>
+              </div>
+            </div>
+          </article>
+
+          <article class="section">
+            <div class="section-title">上周备课计划</div>
+            <div class="plan-body">
+              <table class="plan-table">
+                <thead>
+                  <tr>
+                    <th>日期</th>
+                    <th>计划内容</th>
+                    <th>类型</th>
+                    <th>状态</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>周一</td>
+                    <td>发布二次函数预习资料</td>
+                    <td>课前</td>
+                    <td>已完成</td>
+                  </tr>
+                  <tr>
+                    <td>周三</td>
+                    <td>课堂讲解：函数图像平移</td>
+                    <td>课中</td>
+                    <td>进行中</td>
+                  </tr>
+                  <tr>
+                    <td>周四</td>
+                    <td>随堂测错题整理</td>
+                    <td>课后</td>
+                    <td>待处理</td>
+                  </tr>
+                  <tr>
+                    <td>周五</td>
+                    <td>分层练习组卷</td>
+                    <td>题库</td>
+                    <td>待发布</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <section class="note">
+                <h3>备课计划摘要</h3>
+                <p>保留计划、状态、任务归属等真实信息结构，用于判断首页下方模块的内容密度和展示方式。</p>
+              </section>
+            </div>
+          </article>
+        </section>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
